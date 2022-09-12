@@ -7,6 +7,7 @@ The members include Grayson, Brock, Arjun, Tyler and Axel.
 Sprint Velocity: Weekly meetings on Mondays in person at EER. 
 Collaboration: Github used for all coding collaboration. 
 Communication: Slack is utilized for updates, issues, and other communication.
+Implimentation Methodology: 
 
 R1-2:
 Features: 
