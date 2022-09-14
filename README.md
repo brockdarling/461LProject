@@ -27,7 +27,7 @@ User information tied to login and kept up-to-date on server. <br/>
 Search functionality, allowing users to search for specific items.  <br/>
 Filtering functionality allowing users to sort by category. <br/>
 
-### R1-3
+### R1-3:
 <img src="./461LUISketch.jpg">
 
 ### R1-4:
