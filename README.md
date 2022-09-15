@@ -32,8 +32,7 @@ and categorization will be implemented at a later point which will incur a techn
 while saving the implementation for a later date. 
 To minimize technical debt, throughout the development process, we will provide adequate comments and perform regular testing. <br/>
 
-User Stories: <br/>
-
+#### User Stories:
 User- <br/>
 As a user I would want a visually appealing UI that is easy to navigate. <br/>
 As a user I would want to be able to filter to see items in a specific category. <br/>
@@ -69,7 +68,8 @@ As a CEO I want the site to be reliable. <br/>
 As a CEO I expect the site to function without constant supervision. <br/>
 As a CEO I want to stick to the US laws on Privacy about info we can collect on users. <br/>
 
-Research Items: <br/>  
+#### Research Items:
+
 
 
 
