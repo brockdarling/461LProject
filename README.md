@@ -70,6 +70,11 @@ As a CEO I expect the site to function without constant supervision. <br/>
 As a CEO I want to stick to the US laws on Privacy about info we can collect on users. <br/>
 
 #### Research Items:
+React.js: Used for website UI development. You can build interactive user interfaces and web apps efficiently. (uses javascript library) <br/>
+MongoDB: database used for storing or retrieving information. Makes it easy to manage info. You can store structured and unstructured data in a JSON like format <br/>
+Heruko Cloud Deploy (PaaS): used to deploy your app. They say they are the "simplest path to get your app to the market." Heruko allows you to quickly deploy, build,
+scale, and manage your application. You can run and operate your app entirely in the cloud. (has been built to work with all types of applications built in most
+programming languages such as Ruby, Node.js, Java, Python, Go, PHP, Scala, Clojure, etc.) <br/>
 
 
 
