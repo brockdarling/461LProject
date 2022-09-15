@@ -27,6 +27,7 @@ User information tied to login and kept up-to-date on server. <br/>
 Search functionality, allowing users to search for specific items.  <br/>
 Filtering functionality allowing users to sort by category. <br/>
 
+#### Technical Debt:
 Technical Debt: Initial baseline implementation will lack certain functionality at the beginning. We recognize that some of these features like filtering, searching,
 and categorization will be implemented at a later point which will incur a technical debt. To offset this, we will frontload the researching of these aspects
 while saving the implementation for a later date. 
