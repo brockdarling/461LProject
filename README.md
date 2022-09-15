@@ -41,15 +41,15 @@ As a user I would want a responsive site. <br/>
 As a user I would want a personal username and password login. <br/>
 As a guest user I would want to be able to view waitlists and who has items checked out without signing in. <br/>
 As a user I would want to see how long I have checked something out for. <br/>
-As a user, I would like to be able to see real-time updates of the amount of available hardware. <br/>
-As a user, I would like to see what I have checked-out and how many. <br/>
-As a user, I would like to have my login information cached, so I don’t have to login at every site access. <br/>
-As a user, I would like the site to respond promptly to clicks and page accesses. (no lag) <br/>
-As a user, I would like to easily check-in information I find crucial. <br/>
-As a user, I would like to easily check-out information I find crucial. <br/>
+As a user I would like to be able to see real-time updates of the amount of available hardware. <br/>
+As a user I would like to see what I have checked-out and how many. <br/>
+As a user I would like to have my login information cached, so I don’t have to login at every site access. <br/>
+As a user I would like the site to respond promptly to clicks and page accesses. (no lag) <br/>
+As a user I would like to easily check-in information I find crucial. <br/>
+As a user I would like to easily check-out information I find crucial. <br/>
 As a user I want my experience to be intuitive. <br/>
-As a user, I would want for my personal information to be safe (privacy). <br/>
-As a user, I would not like everyone to be able to see all my projects. <br/>
+As a user I would want for my personal information to be safe (privacy). <br/>
+As a user I would not like everyone to be able to see all my projects. <br/>
 As a user I would like to maybe have the option to re-checkout an item if I still need it longer. <br/>
 As a user I would like to maybe have an option of asking a question to a representative through a chat box or email. <br/>
 
@@ -63,7 +63,7 @@ As an admin I would want to be able to make minor changes to the site without th
 CEO- <br/>
 As a CEO I would want check-out history to be tracked and easily referenced. <br/>
 As a CEO I want login information to be encrypted for protection. <br/>
-As a CEO, I would like the site to operate well even with high volume site traffic. <br/>
+As a CEO I would like the site to operate well even with high volume site traffic. <br/>
 As a CEO I want the site to be reliable. <br/>
 As a CEO I expect the site to function without constant supervision. <br/>
 As a CEO I want to stick to the US laws on Privacy about info we can collect on users. <br/>
