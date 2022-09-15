@@ -32,9 +32,9 @@ and categorization will be implemented at a later point which will incur a techn
 while saving the implementation for a later date. 
 To minimize technical debt, throughout the development process, we will provide adequate comments and perform regular testing. <br/>
 
-User Stories:
+User Stories: <br/>
 
-User-
+User- <br/>
 As a user I would want a visually appealing UI that is easy to navigate. <br/>
 As a user I would want to be able to filter to see items in a specific category. <br/>
 As a user I would want to search for items instead of looking through a catalog. <br/>
@@ -54,20 +54,22 @@ As a user, I would not like everyone to be able to see all my projects. <br/>
 As a user I would like to maybe have the option to re-checkout an item if I still need it longer. <br/>
 As a user I would like to maybe have an option of asking a question to a representative through a chat box or email. <br/>
 
-Admin-
+Admin- <br/>
 As an admin I would want to search for projects instead of looking through a catalog. <br/>
 As an admin I would want to view all projects. <br/>
 As a project manager, I would like my own unique project with personal identifiable information. <br/>
 As an admin I would want to see every piece of hardware have its own (ID) to make it easier to track. <br/>
 As an admin I would want to be able to make minor changes to the site without the site crashing for users. <br/>
 
-CEO-
+CEO- <br/>
 As a CEO I would want check-out history to be tracked and easily referenced. <br/>
 As a CEO I want login information to be encrypted for protection. <br/>
 As a CEO, I would like the site to operate well even with high volume site traffic. <br/>
 As a CEO I want the site to be reliable. <br/>
 As a CEO I expect the site to function without constant supervision. <br/>
 As a CEO I want to stick to the US laws on Privacy about info we can collect on users. <br/>
+
+Research Items: <br/>  
 
 
 
@@ -82,3 +84,10 @@ PyTest for testing; <br/>
 MongoDB for database; <br/>
 Heroku for cloud deploying; <br/>
 React.js for front-end; <br/>
+
+#### Approach:
+We are going to have a front-end and a back-end team that work together and communicate with each other throughout the project. Teams will check up with each other
+in our weekly meetings and plan accoridingly as we go. <br/>
+
+Front-end: Tyler, Axel <br/>
+Back-end: Brock, Arjun, Grayson <br/>
