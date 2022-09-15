@@ -93,7 +93,7 @@ React.js for front-end; <br/>
 
 #### Approach:
 We are going to have a front-end and a back-end team that work together and communicate with each other throughout the project. Teams will check up with each other
-in our weekly meetings and plan accoridingly as we go. <br/>
+in our weekly meetings and plan accordingly as we go. <br/>
 
 Front-end: Tyler, Axel <br/>
 Back-end: Brock, Arjun, Grayson <br/>
