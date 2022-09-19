@@ -3,7 +3,7 @@ This is the repository for our 461L team project.
 
 ## Project Plan: 
 ### R1-1:
-The members include Grayson, Brock, Arjun, Tyler and Axel. <br/>
+The members include Grayson, Brock, Arjun, Tyler, Steven and Axel. <br/>
 Sprint Velocity: Weekly meetings on Mondays in person at EER. <br/>
 Collaboration: Github used for all coding collaboration. <br/>
 Communication: Slack is utilized for updates, issues, and other communication. <br/>
@@ -95,5 +95,5 @@ React.js for front-end; <br/>
 We are going to have a front-end and a back-end team that work together and communicate with each other throughout the project. Teams will check up with each other
 in our weekly meetings and plan accordingly as we go. <br/>
 
-Front-end: Tyler, Axel <br/>
+Front-end: Tyler, Axel, Steven <br/>
 Back-end: Brock, Arjun, Grayson <br/>
