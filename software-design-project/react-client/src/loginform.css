@@ -1,16 +1,13 @@
 * {
     margin: 0;
     box-sizing: border-box;
-}
-
-@font-face {
-    font-family:'Times New Roman', Times, serif;
-    src: url();
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .page{
     height: 100vh;
     width: 100%;
+    background-color: rgba(123, 169, 179, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -38,7 +35,7 @@
 
 .alt-login div {
     width: 40%;
-    height: 80%;
+    height: 100%;
     border-radius: 0.25em;
     background-color: #e8ecf2;
     box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8), 5px 5px 10px rgba(0, 0, 0, 0.25);
@@ -47,22 +44,32 @@
     background-size: 15%;
     background-repeat: no-repeat;
     cursor: pointer;
-    
+    transition: 0.5s;
+    border-radius: 9999px;
 }
+
+.alt-login div:hover{
+    color: rgb(41, 111, 127);
+    box-shadow: -1px -1px 5px rgba(255, 255, 255, 0.6), 
+        1px 1px 5px rgba(0, 0, 0, 0.3),
+        inset -2px -2px 5px rgba(255, 255, 255, 0.3), 
+        inset 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 
 .google{background-image: url(icons/google.png)}
 
 input {
     border: none;
-    background-color: rgb(229, 226, 226);
-    height: 4em;
+    background-color: rgba(123, 169, 179, 0.15);
+    height: 3em;
     border-radius: 0.25em;
     text-align: center;
     padding: 2em;
 }
 
 input:focus {
-    outline-color: rgb(32, 177, 255);
+    outline-color: rgb(41, 111, 127);
 }
 
 .login-btn{
@@ -85,6 +92,7 @@ input:focus {
 }
 
 .login-btn:hover{
+    color: rgb(41, 111, 127);
     box-shadow: -1px -1px 5px rgba(255, 255, 255, 0.6), 
         1px 1px 5px rgba(0, 0, 0, 0.3),
         inset -2px -2px 5px rgba(255, 255, 255, 0.3), 
