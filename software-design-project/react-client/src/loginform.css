@@ -1,0 +1,114 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family:'Times New Roman', Times, serif;
+    src: url();
+}
+
+.page{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cover{
+    background-color: #e8ecf2;
+    width: 30em;
+    height: 35em;
+    position: relative;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.alt-login {
+    width: 100%;
+    height: 3em;
+    border-radius: 0.25em;
+    display: flex;
+    justify-content: space-around;
+}
+
+.alt-login div {
+    width: 40%;
+    height: 80%;
+    border-radius: 0.25em;
+    background-color: #e8ecf2;
+    box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8), 5px 5px 10px rgba(0, 0, 0, 0.25);
+    background-position: center;
+    background-size: contain;
+    background-size: 15%;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    
+}
+
+.google{background-image: url(icons/google.png)}
+
+input {
+    border: none;
+    background-color: rgb(229, 226, 226);
+    height: 4em;
+    border-radius: 0.25em;
+    text-align: center;
+    padding: 2em;
+}
+
+input:focus {
+    outline-color: rgb(32, 177, 255);
+}
+
+.login-btn{
+    width: 40%;
+    height: 3em;
+    background-color:#e8ecf2;
+    border: 4px solid #e8ecf2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+    border-radius: 9999px;
+    box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8), 5px 5px 10px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+
+.text{
+    position: relative;
+    bottom: -2em;
+}
+
+.login-btn:hover{
+    box-shadow: -1px -1px 5px rgba(255, 255, 255, 0.6), 
+        1px 1px 5px rgba(0, 0, 0, 0.3),
+        inset -2px -2px 5px rgba(255, 255, 255, 0.3), 
+        inset 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hide{
+    display: none;
+    position: absolute;
+    transform: scale(1);
+}
+
+.login-popup{
+    position: absolute;
+    height: 30em;
+    width: 30em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25em;
+    background-color: black;
+    color: white;
+    bottom: 0;
+    transform: scale(1);
+    transition: 1.5s;
+}
