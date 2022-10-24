@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 //import UserInfo from './UserInfo';
 import LoginForm from "./loginform.js"
+import Projects  from './projects.js';
+
 
 //import uuidv4 from 'uuid/v4'
 function App() {
@@ -19,8 +21,11 @@ function App() {
 
   return(
     <div className = "page">
-      <LoginForm/>
+      <Projects/>
     </div>
+    // <div className = "page">
+    //   <LoginForm/>
+    // </div>
   );
 
 
