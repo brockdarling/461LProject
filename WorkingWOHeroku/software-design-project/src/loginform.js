@@ -7,7 +7,7 @@ const LoginForm = () => {
     const popup = () => {
         var password = document.getElementById("password").value
         var username = document.getElementById("username").value
-        fetch('/confirm/' + username + '/' + password)
+        fetch('/new/' + username + '/' + password)
         .then((response) => {
             if (response.ok) {
                 try {

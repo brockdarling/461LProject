@@ -32,9 +32,13 @@ numberOfMembers = 0
 @app.route("/new/<username>/<password>", methods=["GET"])
 def newUser(username, password):
     global numberOfMembers 
-    numberOfMembers += 1
+   
     accessCredentials = (username, password)
     global memberLogins 
+    for key in memberLogins.keys():
+        if key[0] == username:
+            return username + " is already a user"
+    numberOfMembers += 1
     memberLogins[accessCredentials] = numberOfMembers
     return username + " is the number " + str(numberOfMembers) + " member of the website"
     
