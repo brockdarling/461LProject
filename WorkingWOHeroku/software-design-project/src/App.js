@@ -20,12 +20,12 @@ function App() {
   }, [])
 
   return(
-    <div className = "page">
-      <Projects/>
-    </div>
     // <div className = "page">
-    //   <LoginForm/>
+    //   <Projects/>
     // </div>
+     <div className = "page">
+       <LoginForm/>
+     </div>
   );
 
 

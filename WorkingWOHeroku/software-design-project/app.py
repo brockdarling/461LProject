@@ -12,6 +12,8 @@ import os
 
 # app = Flask(__name__, static_folder='./build', static_url_path='/')
 
+
+
 app = Flask(__name__)
 
 # if __name__ == "__main__":
@@ -21,7 +23,30 @@ app = Flask(__name__)
 # Members API route
 # @app.route('/')
 # def index():
-#     return app.send_static_file('index.html')   
+#     return app.send_static_file('index.html')  
+# 
+
+memberLogins = {}
+numberOfMembers = 0
+
+@app.route("/new/<username>/<password>", methods=["GET"])
+def newUser(username, password):
+    global numberOfMembers 
+    numberOfMembers += 1
+    accessCredentials = (username, password)
+    global memberLogins 
+    memberLogins[accessCredentials] = numberOfMembers
+    return username + " is the number " + str(numberOfMembers) + " member of the website"
+    
+
+@app.route("/confirm/<username>/<password>", methods=["GET"])
+def confirm(username, password):
+    global memberLogins
+    if memberLogins.get((username, password)) == None:
+        return username + " is not a user for the website"
+    return username + " is a user for the website"
+   
+
 
 
 @app.route("/members")
