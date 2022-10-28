@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./loginform.css"
 
-const LoginForm = () => {
+const Signup = () => {
 
     const [popupStyle, showPopup] = useState("hide")
     const popup = () => {
@@ -34,14 +34,15 @@ const LoginForm = () => {
 
     return (
         <div className="cover">
-            <h1>Login</h1>
-            <input style={{ marginTop: '13%' }} id="username" className="login-input" type="text" placeholder="username" />
-            <input style={{ marginTop: '8%' }} id="password" className="login-input" type="password" placeholder="password" />
+            <h1>Signup</h1>
+            <input style={{ marginTop: '10%' }} id="username" className="login-input" type="text" placeholder="username" />
+            <input style={{ marginTop: '7%' }} id="uid" className="login-input" type="text" placeholder="user id" />
+            <input style={{ marginTop: '7%' }} id="password" className="login-input" type="password" placeholder="password" />
 
-            <div style={{ marginTop: '15%' }} className="login-btn" onClick={popup}>Login</div>
+            <div style={{ marginTop: '13%' }} className="login-btn" onClick={popup}>Sign Up</div>
 
             <text style = {{marginTop: '5%'}} className="sign-in">
-                sign in
+                login
             </text>
 
             <dic className={popupStyle}>
@@ -49,8 +50,10 @@ const LoginForm = () => {
                 <p>Username or password incorrect</p>
             </dic>
 
+
+
         </div>
     )
 }
 
-export default LoginForm
+export default Signup

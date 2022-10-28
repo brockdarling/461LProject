@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 //import UserInfo from './UserInfo';
-import LoginForm from "./loginform.js"
-import Projects  from './projects.js';
+import LoginForm from "./loginform.js";
+import Projects from './projects.js';
+import Signup from "./signup.js";
 
 
 //import uuidv4 from 'uuid/v4'
@@ -19,21 +20,17 @@ function App() {
     )
   }, [])
 
-  return(
+  return (
     // <div className = "page">
     //   <Projects/>
     // </div>
-     <div className = "page">
-       <LoginForm/>
-     </div>
+    <div className="page">
+      <LoginForm />
+    </div>
+    // <div className="page">
+    //   <Signup />
+    // </div>
   );
-
-
-  // return (
-  //   <>
-  //     <UserInfo />
-  //   </>
-  // )
 }
 
 export default App;
