@@ -8,6 +8,7 @@ from flask_marshmallow import Marshmallow
 from flask_cors import CORS
 from flask import request
 import os
+from pymongo import MongoClient
 
 
 # app = Flask(__name__, static_folder='./build', static_url_path='/')
@@ -24,24 +25,24 @@ app = Flask(__name__)
 # @app.route('/')
 # def index():
 #     return app.send_static_file('index.html')  
-# 
+# jbG1kDkSwwyZVssJ
 
 
-memberLogins = {}
-numberOfMembers = 0
+client = MongoClient('mongodb+srv://gwills:jbG1kDkSwwyZVssJ@cluster0.kdtylku.mongodb.net/test?retryWrites=true&w=majority')
+db = client['userInfo']
+users = db['random']
 
 @app.route("/new/<username>/<password>", methods=["GET"])
 def newUser(username, password):
-    global numberOfMembers 
-   
-    accessCredentials = (username, password)
-    global memberLogins 
-    for key in memberLogins.keys():
-        if key[0] == username:
-            return username + " is already a user"
-    numberOfMembers += 1
-    memberLogins[accessCredentials] = numberOfMembers
-    return username + " is the number " + str(numberOfMembers) + " member of the website"
+    
+    if users.find_one({'username': username}):
+        return username + " is already a user"
+    userData = {
+        'username' : username,
+        'password' : password
+    }
+    users.insert_one(userData)
+    return 'done'
     
 
 @app.route("/confirm/<username>/<password>", methods=["GET"])
