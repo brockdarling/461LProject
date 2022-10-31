@@ -80,7 +80,7 @@ def checkIn_hardware(projectid, hwset, qty):
     returnData = {
         "projectid": projectid,
         "hwset": hwset,
-        "qty": currQty + qty
+        "qty": qty
     }
 
     print(returnData)
@@ -102,7 +102,7 @@ def checkOut_hardware(projectid, hwset, qty):
     returnData = {
         "projectid": projectid,
         "hwset": hwset,
-        "qty": currQty - qty
+        "qty": qty
     }
 
     print(returnData)
