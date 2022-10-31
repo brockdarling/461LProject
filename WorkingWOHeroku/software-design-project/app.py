@@ -100,7 +100,7 @@ def checkIn_hardware(projectid, hwset, qty, maxQty):
         "hwset": hwset,
         "qty": newQty,
         "maxQty" : maxQty,
-        "setsCheckedI": setsCheckedIn}
+        "setsCheckedIn": setsCheckedIn}
 
     print(returnData)
     return jsonify(returnData)
