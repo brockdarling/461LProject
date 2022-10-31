@@ -9,6 +9,8 @@ from flask_cors import CORS
 from flask import request
 import os
 from pymongo import MongoClient
+from encryption import customEncrypt
+
 import certifi
 ca = certifi.where()
 
@@ -38,9 +40,10 @@ projects = projectDB['data']
 
 @app.route("/new/<username>/<password>/<uid>", methods=['POST'])    #need to add {method: 'POST'} to the fetch in signup.js
 def newUser(username, password, uid):
-    
     if users.find_one({'username': username}):
         return username + " is already a user"
+    # encryptedPassword = customEncrypt(password, 7, 1)
+    # print(encryptedPassword)
     userData = {
         'username' : username,
         'password' : password,
@@ -56,6 +59,8 @@ def confirm(username, password):
     signIn = users.find_one({'username' : username})
     if not signIn:
         return username + " is not a user for the website"
+    # decryptedPassword = customEncrypt(signIn['password'], 7, -1)
+    # print(decryptedPassword)
     if signIn['password'] != password:
         return password + ' is not the correct password'
     return username + " is a user for the website"
@@ -110,16 +115,24 @@ def checkOut_hardware(projectid, hwset, qty):
 
 # This function queries the projectId from the URL and returns the project id to the
 # front end. The front end displays a pop-up message which says “Joined <projectId>”
-@app.route('/joinProject/<projectid>', methods=['GET'])
+@app.route('/joinProject/<projectid>', methods=['PUT'])
 def joinProject(projectid):
     # return "Joined " + projectid
     return projectid
 
 # This function queries the projectId from the URL and returns the project id to the
 # front end. The front end displays a pop-up message which says “Left <projectId>”
-@app.route('/leaveProject/<projectid>', methods=['GET'])
+@app.route('/leaveProject/<projectid>', methods=['PUT'])
 def leaveProject(projectid):
     return projectid
+
+@app.route('/allprojects', methods=['GET'])
+def getAllProjects():
+    allpjs = list(projects.find({}))
+    for i in allpjs:
+        del i['_id']
+
+    return jsonify(allpjs)
 
 
 if __name__ == "__main__":
