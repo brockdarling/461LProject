@@ -1,7 +1,19 @@
 import React, { useState } from "react";
 import "./loginform.css"
+import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
 
 const Signup = () => {
+    const navigate = useNavigate();
+
+    const navigateProjects = () => {
+        navigate('/Projects');
+      };
+
+    const navigateLogin = () => {
+        navigate('/');
+    };
 
     const [popupStyle, showPopup] = useState("hide")
     const popup = () => {
@@ -40,18 +52,17 @@ const Signup = () => {
             <input style={{ marginTop: '7%' }} id="uid" className="login-input" type="text" placeholder="user id" />
             <input style={{ marginTop: '7%' }} id="password" className="login-input" type="password" placeholder="password" />
 
-            <div style={{ marginTop: '13%' }} className="login-btn" onClick={popup}>Sign Up</div>
+            {/* <div style={{ marginTop: '13%' }} className="login-btn" onClick={popup}>Sign Up</div> */}
+            <div style={{ marginTop: '13%' }} className="login-btn" onClick={navigateProjects}>Sign Up</div>
 
-            <text style = {{marginTop: '5%'}} className="sign-in">
-                login
-            </text>
+            <div className = "sign-in" style={{ marginTop: '5%' }} onClick={navigateLogin}>
+                Login
+            </div>
 
             <dic className={popupStyle}>
                 <h3>Login Failed</h3>
                 <p>Username or password incorrect</p>
             </dic>
-
-
 
         </div>
     )
