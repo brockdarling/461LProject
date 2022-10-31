@@ -138,7 +138,7 @@ class HWSet extends React.Component {
     handleJoinLeave() {
 
         if (this.state.joinButton === 'Join') {
-            fetch('/joinProject/' + this.state.name)
+            fetch('/joinProject/' + this.state.name + '/' + 'user1' + '/' + 'brok')
                 .then((response) => {
                     if (response.ok) {
                         try {
@@ -161,7 +161,7 @@ class HWSet extends React.Component {
 
         }
         else {
-            fetch('/leaveProject/' + this.state.name)
+            fetch('/leaveProject/' + this.state.name + '/' + 'user1' + '/' + 'brok')
                 .then((response) => {
                     if (response.ok) {
                         try {

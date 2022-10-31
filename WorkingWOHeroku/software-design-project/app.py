@@ -105,7 +105,7 @@ def checkIn_hardware(projectid, hwset, qty, maxQty):
 # This function queries the projectId and quantity from the URL and returns the
 # project id and quantity to the front end. The front end displays a pop-up message
 # which says “<qty> hardware checked out”
-@app.route('/checkOut/<projectid>/<hwset>/<qty>/<maxQty>', methods=['GEt'])
+@app.route('/checkOut/<projectid>/<hwset>/<qty>/<maxQty>', methods=['GET'])
 def checkOut_hardware(projectid, hwset, qty, maxQty):
     hwSet = int(hwset)
     pj = projects.find_one({'projectID': projectid})
@@ -140,15 +140,20 @@ def checkOut_hardware(projectid, hwset, qty, maxQty):
 
 # This function queries the projectId from the URL and returns the project id to the
 # front end. The front end displays a pop-up message which says “Joined <projectId>”
-@app.route('/joinProject/<projectid>', methods=['GET'])
-def joinProject(projectid):
+@app.route('/joinProject/<projectid>/<userID>/<username>', methods=['GET'])
+def joinProject(projectid, userID, username):
+    users.update_one({'username': username},{'$set': {'projects.' + str(projectid): [0,0]}})
+    projects.update_one({'projectID': projectid},{'$set': {'users.' + str(userID):  True}})
     # return "Joined " + projectid
+
     return projectid
 
 # This function queries the projectId from the URL and returns the project id to the
 # front end. The front end displays a pop-up message which says “Left <projectId>”
-@app.route('/leaveProject/<projectid>', methods=['GET'])
-def leaveProject(projectid):
+@app.route('/leaveProject/<projectid>/<userID>/<username>', methods=['GET'])
+def leaveProject(projectid, userID, username):
+    users.update_one({'username': username},{'$set': {'projects.' + str(projectid): [0,0]}})
+    projects.update_one({'projectID': projectid},{'$set': {'users.' + str(userID):  False}})
     return projectid
 
 
