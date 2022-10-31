@@ -10,7 +10,6 @@ from flask import request
 import os
 from pymongo import MongoClient
 import certifi
-
 ca = certifi.where()
 
 
@@ -31,7 +30,7 @@ app = Flask(__name__)
 # jbG1kDkSwwyZVssJ
 
 
-client = MongoClient('mongodb+srv://gwills:jbG1kDkSwwyZVssJ@cluster0.kdtylku.mongodb.net/test?retryWrites=true&w=majority', tlsCAFile=ca)
+client = MongoClient('mongodb+srv://gwills:jbG1kDkSwwyZVssJ@cluster0.kdtylku.mongodb.net/test?retryWrites=true&w=majority', tlsCAFile = ca)
 userDB = client['userInfo']
 users = userDB['random']
 projectDB = client['projects']
@@ -93,10 +92,12 @@ def checkIn_hardware(projectid, hwset, qty):
 @app.route('/checkOut/<projectid>/<hwset>/<qty>', methods=['POST'])
 def checkOut_hardware(projectid, hwset, qty):
     qty = int(qty)
-    pj = projects.find_one({'projectID': projectid})
-    currQty = pj["HWSet"][hwset-1]
-    print(currQty)
-    projects.update({'projectID': projectid},{'$set': {'HWSet.' + str(hwset-1) + '.content': currQty - qty}})
+    currQty = projects.find_one({"projectID" : projectid})
+    currQty = currQty[str(hwset)]
+
+    if currQty - qty >= 0:
+        projects.update_one({"projectID" : projectid}, {"$set" : {str(hwset) : currQty - qty}})
+  
     return{
         "projectid": projectid,
         "hwset": hwset,
