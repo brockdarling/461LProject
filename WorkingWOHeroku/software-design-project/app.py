@@ -9,6 +9,8 @@ from flask_cors import CORS
 from flask import request
 import os
 from pymongo import MongoClient
+from encryption import customEncrypt
+
 import certifi
 ca = certifi.where()
 
@@ -36,11 +38,12 @@ users = userDB['random']
 projectDB = client['projects']
 projects = projectDB['data']
 
-@app.route("/new/<username>/<password>/<uid>", methods=["GET"])
+@app.route("/new/<username>/<password>/<uid>", methods=['POST'])    #need to add {method: 'POST'} to the fetch in signup.js
 def newUser(username, password, uid):
-    
     if users.find_one({'username': username}):
         return username + " is already a user"
+    # encryptedPassword = customEncrypt(password, 7, 1)
+    # print(encryptedPassword)
     userData = {
         'username' : username,
         'password' : password,
@@ -51,11 +54,13 @@ def newUser(username, password, uid):
     return 'done'
     
 
-@app.route("/confirm/<username>/<password>", methods=["GET"])
+@app.route("/confirm/<username>/<password>", methods=['GET'])
 def confirm(username, password):
     signIn = users.find_one({'username' : username})
     if not signIn:
         return username + " is not a user for the website"
+    # decryptedPassword = customEncrypt(signIn['password'], 7, -1)
+    # print(decryptedPassword)
     if signIn['password'] != password:
         return password + ' is not the correct password'
     return username + " is a user for the website"
@@ -160,6 +165,14 @@ def leaveProject(projectid, userID, username):
     users.update_one({'username': username},{'$set': {'projects.' + str(projectid): [0,0]}})
     projects.update_one({'projectID': projectid},{'$set': {'users.' + str(userID):  False}})
     return projectid
+
+@app.route('/allprojects', methods=['GET'])
+def getAllProjects():
+    allpjs = list(projects.find({}))
+    for i in allpjs:
+        del i['_id']
+
+    return jsonify(allpjs)
 
 
 if __name__ == "__main__":
