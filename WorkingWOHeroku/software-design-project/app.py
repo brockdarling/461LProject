@@ -9,6 +9,8 @@ from flask_cors import CORS
 from flask import request
 import os
 from pymongo import MongoClient
+import certifi
+ca = certifi.where()
 
 
 # app = Flask(__name__, static_folder='./build', static_url_path='/')
@@ -28,7 +30,7 @@ app = Flask(__name__)
 # jbG1kDkSwwyZVssJ
 
 
-client = MongoClient('mongodb+srv://gwills:jbG1kDkSwwyZVssJ@cluster0.kdtylku.mongodb.net/test?retryWrites=true&w=majority')
+client = MongoClient('mongodb+srv://gwills:jbG1kDkSwwyZVssJ@cluster0.kdtylku.mongodb.net/test?retryWrites=true&w=majority', tlsCAFile = ca)
 userDB = client['userInfo']
 users = userDB['random']
 projectDB = client['projects']
@@ -70,6 +72,10 @@ def members():
 @app.route('/checkIn/<projectid>/<hwset>/<qty>', methods=['GET'])
 def checkIn_hardware(projectid, hwset, qty):
     qty = int(qty)
+    
+    
+    projects.update_one({"projectID" : projectid}, {"$set" : {"1" : qty}})
+                    
     return{
         "projectid": projectid,
         "hwset": hwset,
@@ -81,6 +87,12 @@ def checkIn_hardware(projectid, hwset, qty):
 @app.route('/checkOut/<projectid>/<hwset>/<qty>', methods=['GET'])
 def checkOut_hardware(projectid, hwset, qty):
     qty = int(qty)
+    currQty = projects.find_one({"projectID" : projectid})
+    currQty = currQty[str(hwset)]
+
+    if currQty - qty >= 0:
+        projects.update_one({"projectID" : projectid}, {"$set" : {str(hwset) : currQty - qty}})
+  
     return{
         "projectid": projectid,
         "hwset": hwset,
