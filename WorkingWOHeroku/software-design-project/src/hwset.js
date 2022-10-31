@@ -37,11 +37,11 @@ class HWSet extends React.Component {
                         />
                         <button onClick={() => {
                             var qty = document.getElementById("hw1qty").value
-                            this.handleCheckIn(1, qty)
+                            this.handleCheckIn(1, qty, this.state.HW1den)
                         }} variant="text">Check In</button>
                         <button onClick={() => {
                             var qty = document.getElementById("hw1qty").value
-                            this.handleCheckOut(1, qty)
+                            this.handleCheckOut(1, qty, this.state.HW2den)
                         }} variant="text">Check Out</button>
                     </div>
                     <div className="statusrow">
@@ -53,11 +53,11 @@ class HWSet extends React.Component {
                         />
                         <button onClick={() => {
                             var qty = document.getElementById("hw2qty").value
-                            this.handleCheckIn(2, qty)
+                            this.handleCheckIn(2, qty, this.state.HW2den)
                         }} variant="text">Check In</button>
                         <button onClick={() => {
                             var qty = document.getElementById("hw2qty").value
-                            this.handleCheckOut(2, qty)
+                            this.handleCheckOut(2, qty, this.state.HW2den)
                         }} variant="text">Check Out</button>
                     </div>
                 </div>
@@ -72,10 +72,10 @@ class HWSet extends React.Component {
     }
 
 
-    handleCheckIn(hwset, qty) {
+    handleCheckIn(hwset, qty, maxQty) {
 
 
-        fetch('/checkIn/' + this.state.name + '/' + hwset + '/' + qty)
+        fetch('/checkIn/' + this.state.name + '/' + hwset + '/' + qty + '/' + maxQty)
             .then((response) => {
                 if (response.ok) {
                     try {
@@ -92,22 +92,26 @@ class HWSet extends React.Component {
                 } else {
                     // var projid = data["projectid"]
                     var hwsetval = data["hwset"]
+                    var quantity = data["qty"]
                     if(hwset == 1){
-                        this.state.HW1num.setState(this.state.HW1num - hwsetval)
+                        //+ what is this plus?
+                        alert(this.state.HW1num)
+                        this.state.HW1num.setState({HW1num : qty})
+                        alert(this.state.HW1num)
                     }
                     else{
-                        this.state.HW2num.setState(this.state.HW1num - hwsetval)
+                        this.state.HW2num.setState(this.state.HW2num - quantity)
                     }
-                    var quantity = data["qty"]
+                    
                     alert(quantity + " hardware checked in from HWSet" + hwsetval)
                 }
             });
 
     }
 
-    handleCheckOut(hwset, qty) {
+    handleCheckOut(hwset, qty, maxQty) {
 
-        fetch('/checkOut/' + this.state.name + '/' + hwset + '/' + qty)
+        fetch('/checkOut/' + this.state.name + '/' + hwset + '/' + qty + '/' + maxQty)
             .then((response) => {
                 if (response.ok) {
                     try {

@@ -69,18 +69,34 @@ def members():
 # This function queries the projectId and quantity from the URL and returns the
 # project id and quantity to the front end. The front end displays a pop-up message
 # which says “<qty> hardware checked in”
-@app.route('/checkIn/<projectid>/<hwset>/<qty>', methods=['GET'])   #change this to 'PUT' and need to add {method: 'PUT'} to the fetch in hwset.js
-def checkIn_hardware(projectid, hwset, qty):
+@app.route('/checkIn/<projectid>/<hwset>/<qty>/<maxQty>', methods=['GET'])   #change this to 'PUT' and need to add {method: 'PUT'} to the fetch in hwset.js
+def checkIn_hardware(projectid, hwset, qty, maxQty):
+
     hwSet = int(hwset)
-    qty = int(qty)
     pj = projects.find_one({'projectID': projectid})
     currQty = pj['HWSet'][hwSet-1]
-    projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): currQty + qty}})
+    qty = int(qty)
+    maxQty = int(maxQty)
+    
+    if currQty == maxQty:
+        #already full
+        newQty = maxQty
+        #none can be checked in
+    elif (currQty + qty) > maxQty:
+        #don't update
+        newQty = maxQty
+        projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): maxQty}})
+        #more are being checked in than space is avaliable
+    else:
+        newQty = currQty + qty
+        projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): newQty}})
+        #normal
 
     returnData = {
         "projectid": projectid,
         "hwset": hwset,
-        "qty": currQty + qty
+        "qty": newQty,
+        "maxQty" : maxQty
     }
 
     print(returnData)
@@ -89,19 +105,38 @@ def checkIn_hardware(projectid, hwset, qty):
 # This function queries the projectId and quantity from the URL and returns the
 # project id and quantity to the front end. The front end displays a pop-up message
 # which says “<qty> hardware checked out”
-@app.route('/checkOut/<projectid>/<hwset>/<qty>', methods=['POST'])
-def checkOut_hardware(projectid, hwset, qty):
+@app.route('/checkOut/<projectid>/<hwset>/<qty>/<maxQty>', methods=['GEt'])
+def checkOut_hardware(projectid, hwset, qty, maxQty):
+    hwSet = int(hwset)
+    pj = projects.find_one({'projectID': projectid})
+    currQty = pj['HWSet'][hwSet-1]
     qty = int(qty)
-    currQty = projects.find_one({"projectID" : projectid})
-    currQty = currQty[str(hwset)]
+    maxQty = int(maxQty)
+    
+    if currQty == 0:
+        #there are zero sets when the user tries to check out sets
+        newQty = 0
+        #send an error that no units are avaliable
+    elif currQty - qty >= 0:
+        #there is adequate sets that are trying to be checked out
+        newQty = currQty - qty
+        projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): newQty}})
+    else:
+        #this is when the user tries to check out more sets than what is avaliable
+        newQty = 0
+        setsCheckedOut = currQty
+        projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): 0}})
+        #throw a flag that a different amount was checked in than requested
 
-    if currQty - qty >= 0:
-        projects.update_one({"projectID" : projectid}, {"$set" : {str(hwset) : currQty - qty}})
   
-    return{
+    returnData = {
         "projectid": projectid,
         "hwset": hwset,
-        "qty": qty}
+        "qty": newQty,
+        "maxQty": maxQty}
+
+    return jsonify(returnData)
+
 
 # This function queries the projectId from the URL and returns the project id to the
 # front end. The front end displays a pop-up message which says “Joined <projectId>”
