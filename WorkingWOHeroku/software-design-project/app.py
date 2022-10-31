@@ -50,8 +50,6 @@ def confirm(username, password):
     if memberLogins.get((username, password)) == None:
         return username + " is not a user for the website"
     return username + " is a user for the website"
-   
-
 
 
 @app.route("/members")
