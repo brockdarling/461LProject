@@ -17,13 +17,16 @@ def customEncrypt(inputText, N, D):
             encryptedText += chr((ord(c) - 34 + N) % 93 + 34)
     elif D == -1:
         # do backward encryption
+        print(inputText)
         for c in reversedText:
+            print(c)
             r = ord(c) - 34
             if r - N < 0:
-                r = 93 - N
+                r = 93 + (r - N)
             else:
                 r -= N
             r += 34
             encryptedText += chr(r)
+            print(encryptedText)
 
     return encryptedText

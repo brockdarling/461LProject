@@ -38,15 +38,15 @@ users = userDB['random']
 projectDB = client['projects']
 projects = projectDB['data']
 
-@app.route("/new/<username>/<password>/<uid>", methods=['POST'])    #need to add {method: 'POST'} to the fetch in signup.js
+@app.route("/new/<username>/<password>/<uid>", methods=['GET'])    #need to add {method: 'POST'} to the fetch in signup.js
 def newUser(username, password, uid):
     if users.find_one({'username': username}):
         return username + " is already a user"
-    # encryptedPassword = customEncrypt(password, 7, 1)
-    # print(encryptedPassword)
+    encryptedPassword = customEncrypt(password, 7, 1)
+    decrypt = customEncrypt(encryptedPassword, 7, -1)
     userData = {
         'username' : username,
-        'password' : password,
+        'password' : encryptedPassword,
         'uid' : uid,
         'projects' : {}
     }
@@ -59,9 +59,9 @@ def confirm(username, password):
     signIn = users.find_one({'username' : username})
     if not signIn:
         return username + " is not a user for the website"
-    # decryptedPassword = customEncrypt(signIn['password'], 7, -1)
-    # print(decryptedPassword)
-    if signIn['password'] != password:
+    decryptedPassword = customEncrypt(signIn['password'], 7, -1)
+    print(decryptedPassword)
+    if decryptedPassword != password:
         return password + ' is not the correct password'
     return username + " is a user for the website"
 
