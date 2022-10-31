@@ -27,9 +27,9 @@ function App() {
     // <div className="page">
     //   <LoginForm />
     // </div>
-    //<div className="page">
+    // <div className="page">
     //  <Signup />
-    //</div>
+    // </div>
   );
 }
 
