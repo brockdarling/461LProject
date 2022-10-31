@@ -21,12 +21,12 @@ function App() {
   }, [])
 
   return (
-    // <div className = "page">
-    //   <Projects/>
-    // </div>
-    <div className="page">
-      <LoginForm />
+    <div className = "page">
+      <Projects/>
     </div>
+    // <div className="page">
+    //   <LoginForm />
+    // </div>
     // <div className="page">
     //   <Signup />
     // </div>
