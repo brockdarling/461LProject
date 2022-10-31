@@ -81,14 +81,17 @@ def checkIn_hardware(projectid, hwset, qty, maxQty):
     if currQty == maxQty:
         #already full
         newQty = maxQty
+        setsCheckedIn = 0
         #none can be checked in
     elif (currQty + qty) > maxQty:
         #don't update
         newQty = maxQty
         projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): maxQty}})
+        setsCheckedIn = currQty
         #more are being checked in than space is avaliable
     else:
         newQty = currQty + qty
+        setsCheckedIn = qty
         projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): newQty}})
         #normal
 
@@ -96,8 +99,8 @@ def checkIn_hardware(projectid, hwset, qty, maxQty):
         "projectid": projectid,
         "hwset": hwset,
         "qty": newQty,
-        "maxQty" : maxQty
-    }
+        "maxQty" : maxQty,
+        "setsCheckedI": setsCheckedIn}
 
     print(returnData)
     return jsonify(returnData)
@@ -116,10 +119,12 @@ def checkOut_hardware(projectid, hwset, qty, maxQty):
     if currQty == 0:
         #there are zero sets when the user tries to check out sets
         newQty = 0
+        setsCheckedOut = 0
         #send an error that no units are avaliable
     elif currQty - qty >= 0:
         #there is adequate sets that are trying to be checked out
         newQty = currQty - qty
+        setsCheckedOut = qty
         projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): newQty}})
     else:
         #this is when the user tries to check out more sets than what is avaliable
@@ -133,7 +138,8 @@ def checkOut_hardware(projectid, hwset, qty, maxQty):
         "projectid": projectid,
         "hwset": hwset,
         "qty": newQty,
-        "maxQty": maxQty}
+        "maxQty": maxQty,
+        "setsCheckedOut": setsCheckedOut}
 
     return jsonify(returnData)
 
@@ -145,7 +151,6 @@ def joinProject(projectid, userID, username):
     users.update_one({'username': username},{'$set': {'projects.' + str(projectid): [0,0]}})
     projects.update_one({'projectID': projectid},{'$set': {'users.' + str(userID):  True}})
     # return "Joined " + projectid
-
     return projectid
 
 # This function queries the projectId from the URL and returns the project id to the
