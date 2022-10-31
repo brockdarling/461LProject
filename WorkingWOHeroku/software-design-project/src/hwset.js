@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./hwset.css"
 // import Button from '@mui/material/Button';
 import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
@@ -17,52 +17,53 @@ class HWSet extends React.Component {
             HW1den: props.HW1den,
             HW2num: props.HW2num,
             HW2den: props.HW2den,
-            joinButton: 'Join'
+            joinButton: 'Join',
+            hw1Input: 0,
+            hw2Input: 0
         }
     }
     render() {
         return (
             <div className="hwsetinfo">
                 <div className="hwsetbox">
-                    <h4>HWSet1: {this.state.HW1num}/{this.state.HW1den}</h4>
-                    <h4>HWSet2: {this.state.HW2num}/{this.state.HW2den}</h4>
+                    <h4 style={{ width: '200px'}}>HWSet1: {this.state.HW1num}/{this.state.HW1den}</h4>
+                    <h4 style={{ width: '200px'}}>HWSet2: {this.state.HW2num}/{this.state.HW2den}</h4>
                 </div>
                 <div className="statusgrid">
                     <div className="statusrow">
-                        <input
-                            className="hw-input" 
-                            type="text"
-                            placeholder="Enter Qty"
-                            id="hw1qty"
-                        />
-                        <button onClick={() => {
-                            var qty = document.getElementById("hw1qty").value
-                            this.handleCheckIn(1, qty, this.state.HW1den)
-                        }} variant="text">Check In</button>
-                        <button onClick={() => {
-                            var qty = document.getElementById("hw1qty").value
-                            this.handleCheckOut(1, qty, this.state.HW2den)
-                        }} variant="text">Check Out</button>
-                    </div>
-                    <div className="statusrow">
-                        <input 
+                        <input onChange={this.handleHW1Input}
                             className="hw-input"
                             type="text"
                             placeholder="Enter Qty"
-                            id="hw2qty"
+                        />
+
+                        <button onClick={() => {
+                            var qty = this.state.hw1Input;
+                            this.handleCheckIn(1, qty, this.state.HW1den)
+                        }} variant="text">Check In</button>
+                        <button onClick={() => {
+                            var qty = this.state.hw1Input;
+                            this.handleCheckOut(1, qty, this.state.HW1den)
+                        }} variant="text">Check Out</button>
+                    </div>
+                    <div className="statusrow">
+                        <input onChange={this.handleHW2Input}
+                            className="hw-input"
+                            type="text"
+                            placeholder="Enter Qty"
                         />
                         <button onClick={() => {
-                            var qty = document.getElementById("hw2qty").value
+                            var qty = this.state.hw2Input;
                             this.handleCheckIn(2, qty, this.state.HW2den)
                         }} variant="text">Check In</button>
                         <button onClick={() => {
-                            var qty = document.getElementById("hw2qty").value
+                            var qty = this.state.hw2Input;
                             this.handleCheckOut(2, qty, this.state.HW2den)
                         }} variant="text">Check Out</button>
                     </div>
                 </div>
                 <div>
-                    <button className = "leave-join-btn" onClick={() => {
+                    <button className="leave-join-btn" onClick={() => {
                         this.handleJoinLeave(
                         )
                     }} variant="text">{this.state.joinButton}</button>
@@ -71,10 +72,16 @@ class HWSet extends React.Component {
         );
     }
 
+    handleHW1Input = (event) => {
+        this.setState({ hw1Input: event.target.value })
+    }
+
+    handleHW2Input = (even) => {
+        this.setState({ hw2Input: even.target.value })
+    }
+
 
     handleCheckIn(hwset, qty, maxQty) {
-
-
         fetch('/checkIn/' + this.state.name + '/' + hwset + '/' + qty + '/' + maxQty)
             .then((response) => {
                 if (response.ok) {
@@ -93,17 +100,19 @@ class HWSet extends React.Component {
                     // var projid = data["projectid"]
                     var hwsetval = data["hwset"]
                     var quantity = data["qty"]
-                    if(hwset == 1){
-                        //+ what is this plus?
-                        alert(this.state.HW1num)
-                        this.state.HW1num.setState({HW1num : qty})
-                        alert(this.state.HW1num)
+                    var setsCheckedIn = data["setsCheckedIn"]
+                    if (hwset == 1) {
+                        this.setState({ HW1num: quantity });
                     }
-                    else{
-                        this.state.HW2num.setState(this.state.HW2num - quantity)
+                    else {
+                        this.setState({ HW2num: quantity });
                     }
-                    
-                    alert(quantity + " hardware checked in from HWSet" + hwsetval)
+                    if (setsCheckedIn == 0) {
+                        alert("No Sets Checked In");
+                    }
+                    else {
+                        alert(setsCheckedIn + " hardware checked in from HWSet" + hwsetval)
+                    }
                 }
             });
 
@@ -129,7 +138,19 @@ class HWSet extends React.Component {
                     // var projid = data["projectid"]
                     var hwsetval = data["hwset"]
                     var quantity = data["qty"]
-                    alert(quantity + " hardware checked out from HWSet" + hwsetval)
+                    var setsCheckedOut = data["setsCheckedOut"]
+                    if (hwset == 1) {
+                        this.setState({ HW1num: quantity });
+                    }
+                    else {
+                        this.setState({ HW2num: quantity });
+                    }
+                    if (setsCheckedOut == 0) {
+                        alert("No Sets Checked Out");
+                    }
+                    else {
+                        alert(setsCheckedOut + " hardware checked out from HWSet" + hwsetval)
+                    }
                 }
             });
 

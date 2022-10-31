@@ -1,6 +1,7 @@
 .projectbox{
     flex: 0 0 auto;
-    background-color: rgba(199, 199, 199, 0.8);
+    /* background-color: rgba(199, 199, 199, 0.8); */
+    background-color: #e8ecf2;
     width: 90%;
     height: 150px;
     border-radius: 0.3em;
@@ -10,7 +11,7 @@
     justify-content: space-around;
     cursor: pointer;
     margin-bottom: 10px;
-    border: 1px solid lightcoral;
+    border: 3px solid lightcoral;
 }
 
 .hwsetbox{
