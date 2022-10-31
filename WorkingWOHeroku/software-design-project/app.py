@@ -70,19 +70,22 @@ def members():
 # This function queries the projectId and quantity from the URL and returns the
 # project id and quantity to the front end. The front end displays a pop-up message
 # which says “<qty> hardware checked in”
-@app.route('/checkIn/<projectid>/<hwset>/<qty>', methods=['GET'])
+@app.route('/checkIn/<projectid>/<hwset>/<qty>', methods=['GET'])   #change this to 'PUT' and need to add {method: 'PUT'} to the fetch in hwset.js
 def checkIn_hardware(projectid, hwset, qty):
+    hwSet = int(hwset)
     qty = int(qty)
     pj = projects.find_one({'projectID': projectid})
-    currQty = pj['HWSet'][int(hwset)-1]
+    currQty = pj['HWSet'][hwSet-1]
+    projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): currQty + qty}})
 
-    print(currQty)
-    # projects.update_one({'projectID': projectid},{'$set': {hwset: currQty + qty})
-    return{
+    returnData = {
         "projectid": projectid,
         "hwset": hwset,
-        "qty": qty
-        }
+        "qty": currQty + qty
+    }
+
+    print(returnData)
+    return jsonify(returnData)
 
 # This function queries the projectId and quantity from the URL and returns the
 # project id and quantity to the front end. The front end displays a pop-up message
