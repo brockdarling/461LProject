@@ -29,8 +29,10 @@ app = Flask(__name__)
 
 
 client = MongoClient('mongodb+srv://gwills:jbG1kDkSwwyZVssJ@cluster0.kdtylku.mongodb.net/test?retryWrites=true&w=majority')
-db = client['userInfo']
-users = db['random']
+userDB = client['userInfo']
+users = userDB['random']
+projectDB = client['projects']
+projects = projectDB['data']
 
 @app.route("/new/<username>/<password>/<uid>", methods=["GET"])
 def newUser(username, password, uid):
@@ -40,7 +42,8 @@ def newUser(username, password, uid):
     userData = {
         'username' : username,
         'password' : password,
-        'uid' : uid
+        'uid' : uid,
+        'projects' : {}
     }
     users.insert_one(userData)
     return 'done'
@@ -48,9 +51,11 @@ def newUser(username, password, uid):
 
 @app.route("/confirm/<username>/<password>", methods=["GET"])
 def confirm(username, password):
-    global memberLogins
-    if memberLogins.get((username, password)) == None:
+    signIn = users.find_one({'username' : username})
+    if not signIn:
         return username + " is not a user for the website"
+    if signIn['password'] != password:
+        return password + ' is not the correct password'
     return username + " is a user for the website"
 
 

@@ -21,15 +21,15 @@ function App() {
   }, [])
 
   return (
-    // <div className = "page">
-    //   <Projects/>
-    // </div>
+     <div className = "page">
+       <Projects/>
+     </div>
     // <div className="page">
     //   <LoginForm />
     // </div>
-    <div className="page">
-      <Signup />
-    </div>
+    //<div className="page">
+    //  <Signup />
+    //</div>
   );
 }
 
