@@ -70,17 +70,26 @@ def members():
 @app.route('/checkIn/<projectid>/<hwset>/<qty>', methods=['GET'])
 def checkIn_hardware(projectid, hwset, qty):
     qty = int(qty)
+    pj = projects.find_one({'projectID': projectid})
+    currQty = pj["HWSet"][hwset-1]
+    print(currQty)
+    projects.update({'projectID': projectid},{'$set': {'HWSet.' + str(hwset-1) + '.content': qty}})
     return{
         "projectid": projectid,
         "hwset": hwset,
-        "qty": qty}
+        "qty": qty
+        }
 
 # This function queries the projectId and quantity from the URL and returns the
 # project id and quantity to the front end. The front end displays a pop-up message
 # which says “<qty> hardware checked out”
-@app.route('/checkOut/<projectid>/<hwset>/<qty>', methods=['GET'])
+@app.route('/checkOut/<projectid>/<hwset>/<qty>', methods=['POST'])
 def checkOut_hardware(projectid, hwset, qty):
     qty = int(qty)
+    pj = projects.find_one({'projectID': projectid})
+    currQty = pj["HWSet"][hwset-1]
+    print(currQty)
+    projects.update({'projectID': projectid},{'$set': {'HWSet.' + str(hwset-1) + '.content': currQty - qty}})
     return{
         "projectid": projectid,
         "hwset": hwset,
