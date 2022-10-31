@@ -162,9 +162,25 @@ def joinProject(projectid, userID, username):
 # front end. The front end displays a pop-up message which says “Left <projectId>”
 @app.route('/leaveProject/<projectid>/<userID>/<username>', methods=['GET'])
 def leaveProject(projectid, userID, username):
-    users.update_one({'username': username},{'$set': {'projects.' + str(projectid): [0,0]}})
-    projects.update_one({'projectID': projectid},{'$set': {'users.' + str(userID):  False}})
-    return projectid
+    user = users.find_one({'uid': '12'})
+    pjs = user['projects']
+    thisPj = pjs[projectid]
+    currQty1 = thisPj[0]
+    currQty2 = thisPj[1]
+    if (currQty1 == 0) & (currQty2 == 0):
+        users.update_one({'username': username},{'$set': {'projects.' + str(projectid): [0,0]}})
+        projects.update_one({'projectID': projectid},{'$set': {'users.' + str(userID):  False}})
+        error = False
+    else:
+        #cannot leave a project if there is still checked out hardware
+        error = True
+    
+    returnData = {
+        "projectid": projectid,
+        "error" : error
+    }
+    return jsonify(returnData)
+    #return projectid
 
 @app.route('/allprojects', methods=['GET'])
 def getAllProjects():
