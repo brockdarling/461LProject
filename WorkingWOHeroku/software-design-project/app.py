@@ -36,7 +36,7 @@ users = userDB['random']
 projectDB = client['projects']
 projects = projectDB['data']
 
-@app.route("/new/<username>/<password>/<uid>", methods=["GET"])
+@app.route("/new/<username>/<password>/<uid>", methods=['POST'])    #need to add {method: 'POST'} to the fetch in signup.js
 def newUser(username, password, uid):
     
     if users.find_one({'username': username}):
@@ -51,7 +51,7 @@ def newUser(username, password, uid):
     return 'done'
     
 
-@app.route("/confirm/<username>/<password>", methods=["GET"])
+@app.route("/confirm/<username>/<password>", methods=['GET'])
 def confirm(username, password):
     signIn = users.find_one({'username' : username})
     if not signIn:
@@ -69,7 +69,7 @@ def members():
 # This function queries the projectId and quantity from the URL and returns the
 # project id and quantity to the front end. The front end displays a pop-up message
 # which says “<qty> hardware checked in”
-@app.route('/checkIn/<projectid>/<hwset>/<qty>', methods=['GET'])   #change this to 'PUT' and need to add {method: 'PUT'} to the fetch in hwset.js
+@app.route('/checkIn/<projectid>/<hwset>/<qty>', methods=['PUT'])   #need to add {method: 'PUT'} to the fetch in hwset.js
 def checkIn_hardware(projectid, hwset, qty):
     hwSet = int(hwset)
     qty = int(qty)
@@ -89,19 +89,24 @@ def checkIn_hardware(projectid, hwset, qty):
 # This function queries the projectId and quantity from the URL and returns the
 # project id and quantity to the front end. The front end displays a pop-up message
 # which says “<qty> hardware checked out”
-@app.route('/checkOut/<projectid>/<hwset>/<qty>', methods=['POST'])
+@app.route('/checkOut/<projectid>/<hwset>/<qty>', methods=['PUT'])  #need to add {method: 'PUT'} to the fetch in hwset.js
 def checkOut_hardware(projectid, hwset, qty):
+    hwSet = int(hwset)
     qty = int(qty)
-    currQty = projects.find_one({"projectID" : projectid})
-    currQty = currQty[str(hwset)]
+    pj = projects.find_one({'projectID': projectid})
+    currQty = pj['HWSet'][hwSet-1]
 
     if currQty - qty >= 0:
-        projects.update_one({"projectID" : projectid}, {"$set" : {str(hwset) : currQty - qty}})
+        projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): currQty - qty}})
   
-    return{
+    returnData = {
         "projectid": projectid,
         "hwset": hwset,
-        "qty": qty}
+        "qty": currQty - qty
+    }
+
+    print(returnData)
+    return jsonify(returnData)
 
 # This function queries the projectId from the URL and returns the project id to the
 # front end. The front end displays a pop-up message which says “Joined <projectId>”
