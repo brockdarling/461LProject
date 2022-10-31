@@ -32,14 +32,15 @@ client = MongoClient('mongodb+srv://gwills:jbG1kDkSwwyZVssJ@cluster0.kdtylku.mon
 db = client['userInfo']
 users = db['random']
 
-@app.route("/new/<username>/<password>", methods=["GET"])
-def newUser(username, password):
+@app.route("/new/<username>/<password>/<uid>", methods=["GET"])
+def newUser(username, password, uid):
     
     if users.find_one({'username': username}):
         return username + " is already a user"
     userData = {
         'username' : username,
-        'password' : password
+        'password' : password,
+        'uid' : uid
     }
     users.insert_one(userData)
     return 'done'

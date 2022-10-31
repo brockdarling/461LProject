@@ -7,7 +7,8 @@ const Signup = () => {
     const popup = () => {
         var password = document.getElementById("password").value
         var username = document.getElementById("username").value
-        fetch('/new/' + username + '/' + password)
+        var uid = document.getElementById('uid').value
+        fetch('/new/' + username + '/' + password + '/' + uid)
             .then((response) => {
                 if (response.ok) {
                     try {
