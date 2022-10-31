@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import "./loginform.css"
+import { Link } from 'react-router-dom';
 
 const LoginForm = () => {
 
     const [popupStyle, showPopup] = useState("hide")
+   
     const popup = () => {
         var password = document.getElementById("password").value
         var username = document.getElementById("username").value
@@ -40,9 +42,11 @@ const LoginForm = () => {
 
             <div style={{ marginTop: '15%' }} className="login-btn" onClick={popup}>Login</div>
 
-            <text style = {{marginTop: '5%'}} className="sign-in">
-                sign in
-            </text>
+            <div style={{ marginTop: '5%' }}>
+                <Link to="/Signup">Sign Up</Link>
+            </div>
+            
+            {/* <div style={{ marginTop: '5%' }} className="sign-in" onClick={toSignUp}>Sign Up</div> */}
 
             <dic className={popupStyle}>
                 <h3>Login Failed</h3>
