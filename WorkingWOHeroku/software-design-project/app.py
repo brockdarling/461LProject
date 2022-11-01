@@ -179,8 +179,8 @@ def leaveProject(projectid, userID, username):
         "projectid": projectid,
         "error" : error
     }
-    return jsonify(returnData)
-    #return projectid
+    #return jsonify(returnData)
+    return projectid
 
 @app.route('/allprojects', methods=['GET'])
 def getAllProjects():

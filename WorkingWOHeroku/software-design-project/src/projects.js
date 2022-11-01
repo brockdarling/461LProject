@@ -55,9 +55,9 @@ class Projects extends React.Component {
                 
                 <SingleProject name={"ProjectTest"} users={this.state.users} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} />
                 <SingleProject name={this.state.name} users={this.state.users} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} />
+                {/* <SingleProject name={"ProjectTest"} users={this.state.users} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} />
                 <SingleProject name={"ProjectTest"} users={this.state.users} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} />
-                <SingleProject name={"ProjectTest"} users={this.state.users} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} />
-                <SingleProject name={"ProjectTest"} users={this.state.users} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} />
+                <SingleProject name={"ProjectTest"} users={this.state.users} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} /> */}
 
             </div>
         )
