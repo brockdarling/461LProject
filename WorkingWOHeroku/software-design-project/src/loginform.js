@@ -1,21 +1,14 @@
 import React, { useState } from "react";
 import "./loginform.css"
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
-const LoginForm = () => {
+function LoginForm() {
     const navigate = useNavigate();
-
-    const navigateProjects = () => {
-        navigate('/Projects');
-    };
-
-    const navigateSignup = () => {
-        navigate('/Signup');
-    };
-
     const [popupStyle, showPopup] = useState("hide")
-    const popup = () => {
+    const [status, setStatus] = useState(false);
+
+    async function confirmUserLogin() {
         var password = document.getElementById("password").value
         var username = document.getElementById("username").value
         fetch('/confirm/' + username + '/' + password)
@@ -31,8 +24,10 @@ const LoginForm = () => {
             })
             .then((data) => {
                 if (data == null) {
+                    setStatus(false);
                     alert("Some error occurred");
                 } else {
+                    setStatus(true);
                     alert(data)
                 }
             });
@@ -41,6 +36,44 @@ const LoginForm = () => {
         showPopup("login-popup")
         setTimeout(() => showPopup("hide"), 3000)
     }
+
+    const navigateProjects = () => {
+        confirmUserLogin();
+        if (status) {
+            navigate('/Projects'); 
+        }
+    };
+
+    const navigateSignup = () => {
+        navigate('/Signup');
+    };
+
+    // const popup = () => {
+    //     var password = document.getElementById("password").value
+    //     var username = document.getElementById("username").value
+    //     fetch('/confirm/' + username + '/' + password)
+    //         .then((response) => {
+    //             if (response.ok) {
+    //                 try {
+    //                     return response.text();
+    //                 }
+    //                 catch (e) {
+    //                     console.log("Could not parse as text")
+    //                 }
+    //             }
+    //         })
+    //         .then((data) => {
+    //             if (data == null) {
+    //                 alert("Some error occurred");
+    //             } else {
+    //                 alert(data)
+    //             }
+    //         });
+
+
+    //     showPopup("login-popup")
+    //     setTimeout(() => showPopup("hide"), 3000)
+    // }
 
 
     return (
@@ -56,10 +89,10 @@ const LoginForm = () => {
                 Sign Up
             </div>
 
-            <dic className={popupStyle}>
+            <div className={popupStyle}>
                 <h3>Login Failed</h3>
                 <p>Username or password incorrect</p>
-            </dic>
+            </div>
 
         </div>
     )

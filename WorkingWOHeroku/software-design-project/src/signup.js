@@ -1,26 +1,18 @@
 import React, { useState } from "react";
 import "./loginform.css"
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
-
-const Signup = () => {
+function Signup() {
     const navigate = useNavigate();
+    // const [popupStyle, showPopup] = useState("hide")
+    const [status, setStatus] = useState(false);
 
-    const navigateProjects = () => {
-        navigate('/Projects');
-      };
-
-    const navigateLogin = () => {
-        navigate('/');
-    };
-
-    const [popupStyle, showPopup] = useState("hide")
-    const popup = () => {
+    async function addNewUserToDB() {
         var password = document.getElementById("password").value
         var username = document.getElementById("username").value
         var uid = document.getElementById('uid').value
-        fetch('/new/' + username + '/' + password + '/' + uid)
+        await fetch('/new/' + username + '/' + password + '/' + uid)
             .then((response) => {
                 if (response.ok) {
                     try {
@@ -33,16 +25,57 @@ const Signup = () => {
             })
             .then((data) => {
                 if (data == null) {
+                    setStatus(false);
                     alert("Some error occurred");
                 } else {
+                    setStatus(true);
                     alert(data)
                 }
             });
-
-
-        showPopup("login-popup")
-        setTimeout(() => showPopup("hide"), 3000)
+    
+    
+        // showPopup("login-popup")
+        // setTimeout(() => showPopup("hide"), 3000)
     }
+
+    const navigateProjects = () => {
+        addNewUserToDB();
+        if (status) {
+            navigate('/Projects'); 
+        }
+      };
+
+    const navigateLogin = () => {
+        navigate('/');
+    };
+    
+    // const popup = () => {
+    //     var password = document.getElementById("password").value
+    //     var username = document.getElementById("username").value
+    //     var uid = document.getElementById('uid').value
+    //     fetch('/new/' + username + '/' + password + '/' + uid)
+    //         .then((response) => {
+    //             if (response.ok) {
+    //                 try {
+    //                     return response.text();
+    //                 }
+    //                 catch (e) {
+    //                     console.log("Could not parse as text")
+    //                 }
+    //             }
+    //         })
+    //         .then((data) => {
+    //             if (data == null) {
+    //                 alert("Some error occurred");
+    //             } else {
+    //                 alert(data)
+    //             }
+    //         });
+
+
+    //     showPopup("login-popup")
+    //     setTimeout(() => showPopup("hide"), 3000)
+    // }
 
 
     return (
@@ -59,10 +92,10 @@ const Signup = () => {
                 Login
             </div>
 
-            <dic className={popupStyle}>
+            {/* <div className={popupStyle}>
                 <h3>Login Failed</h3>
                 <p>Username or password incorrect</p>
-            </dic>
+            </div> */}
 
         </div>
     )
