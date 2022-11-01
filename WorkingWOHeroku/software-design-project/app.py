@@ -82,6 +82,19 @@ def checkIn_hardware(projectid, hwset, qty, maxQty):
     currQty = pj['HWSet'][hwSet-1]
     qty = int(qty)
     maxQty = int(maxQty)
+
+    user = users.find_one({'username': 'user1'})
+    pjs = user['projects']
+    thisPj = pjs[projectid]
+    userPjQty1 = thisPj[0]
+    userPjQty2 = thisPj[1]
+
+    if(hwSet == 1):
+        if qty > userPjQty1:
+            qty = userPjQty1
+    else:
+        if qty > userPjQty2:
+            qty = userPjQty2
     
     if currQty == maxQty:
         #already full
@@ -91,14 +104,27 @@ def checkIn_hardware(projectid, hwset, qty, maxQty):
     elif (currQty + qty) > maxQty:
         #don't update
         newQty = maxQty
-        projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): maxQty}})
-        setsCheckedIn = currQty
+        #projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): maxQty}})
+        setsCheckedIn = maxQty - currQty
+        if(hwSet == 1):
+            users.update_one({'username': 'user1'},{'$set': {'projects.' + str(projectid): [userPjQty1 - setsCheckedIn,userPjQty2]}})
+        else:
+            users.update_one({'username': 'user1'},{'$set': {'projects.' + str(projectid): [userPjQty1 ,userPjQty2 - setsCheckedIn]}})
         #more are being checked in than space is avaliable
     else:
         newQty = currQty + qty
         setsCheckedIn = qty
-        projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): newQty}})
+        #projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): newQty}})
+        if(hwSet == 1):
+            users.update_one({'username': 'user1'},{'$set': {'projects.' + str(projectid): [userPjQty1 - setsCheckedIn,userPjQty2]}})
+        else:
+            users.update_one({'username': 'user1'},{'$set': {'projects.' + str(projectid): [userPjQty1 ,userPjQty2 - setsCheckedIn]}})
         #normal
+
+    allPjs = projects.find({})
+    for proj in allPjs:
+        print("here once")
+        projects.update_one({'projectID': proj["projectID"]},{'$set': {'HWSet.'+str(hwSet-1): newQty}})
 
     returnData = {
         "projectid": projectid,
@@ -120,6 +146,12 @@ def checkOut_hardware(projectid, hwset, qty, maxQty):
     currQty = pj['HWSet'][hwSet-1]
     qty = int(qty)
     maxQty = int(maxQty)
+
+    user = users.find_one({'username': 'user1'})
+    pjs = user['projects']
+    thisPj = pjs[projectid]
+    userPjQty1 = thisPj[0]
+    userPjQty2 = thisPj[1]
     
     if currQty == 0:
         #there are zero sets when the user tries to check out sets
@@ -130,13 +162,24 @@ def checkOut_hardware(projectid, hwset, qty, maxQty):
         #there is adequate sets that are trying to be checked out
         newQty = currQty - qty
         setsCheckedOut = qty
-        projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): newQty}})
+        if(hwSet == 1):
+            users.update_one({'username': 'user1'},{'$set': {'projects.' + str(projectid): [userPjQty1 + setsCheckedOut,userPjQty2]}})
+        else:
+            users.update_one({'username': 'user1'},{'$set': {'projects.' + str(projectid): [userPjQty1 ,userPjQty2 + setsCheckedOut]}})
     else:
         #this is when the user tries to check out more sets than what is avaliable
         newQty = 0
         setsCheckedOut = currQty
-        projects.update_one({'projectID': projectid},{'$set': {'HWSet.'+str(hwSet-1): 0}})
+        if(hwSet == 1):
+            users.update_one({'username': 'user1'},{'$set': {'projects.' + str(projectid): [userPjQty1 + setsCheckedOut,userPjQty2]}})
+        else:
+            users.update_one({'username': 'user1'},{'$set': {'projects.' + str(projectid): [userPjQty1 ,userPjQty2 + setsCheckedOut]}})
         #throw a flag that a different amount was checked in than requested
+
+    allPjs = projects.find({})
+    for proj in allPjs:
+        print("here once")
+        projects.update_one({'projectID': proj["projectID"]},{'$set': {'HWSet.'+str(hwSet-1): newQty}})
 
   
     returnData = {
@@ -153,7 +196,7 @@ def checkOut_hardware(projectid, hwset, qty, maxQty):
 # front end. The front end displays a pop-up message which says “Joined <projectId>”
 @app.route('/joinProject/<projectid>/<userID>/<username>', methods=['GET'])
 def joinProject(projectid, userID, username):
-    users.update_one({'username': username},{'$set': {'projects.' + str(projectid): [0,0]}})
+    users.update_one({'username': 'user1'},{'$set': {'projects.' + str(projectid): [0,0]}})
     projects.update_one({'projectID': projectid},{'$set': {'users.' + str(userID):  True}})
     # return "Joined " + projectid
     return projectid
@@ -162,13 +205,13 @@ def joinProject(projectid, userID, username):
 # front end. The front end displays a pop-up message which says “Left <projectId>”
 @app.route('/leaveProject/<projectid>/<userID>/<username>', methods=['GET'])
 def leaveProject(projectid, userID, username):
-    user = users.find_one({'uid': '12'})
+    user = users.find_one({'username': 'user1'})
     pjs = user['projects']
     thisPj = pjs[projectid]
     currQty1 = thisPj[0]
     currQty2 = thisPj[1]
     if (currQty1 == 0) & (currQty2 == 0):
-        users.update_one({'username': username},{'$set': {'projects.' + str(projectid): [0,0]}})
+        users.update_one({'username': 'user1'},{'$unset': {'projects.' + str(projectid) : ""}})
         projects.update_one({'projectID': projectid},{'$set': {'users.' + str(userID):  False}})
         error = False
     else:
@@ -179,8 +222,8 @@ def leaveProject(projectid, userID, username):
         "projectid": projectid,
         "error" : error
     }
-    #return jsonify(returnData)
-    return projectid
+    return jsonify(returnData)
+    #return projectid
 
 @app.route('/allprojects', methods=['GET'])
 def getAllProjects():
