@@ -18,7 +18,7 @@ function Projects() {
                 setState({
                     data: jsonData.map(item => ({
                         pid: item.projectID,
-                        users: JSON.stringify(item.users),
+                        users: JSON.stringify(item.users).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll(',', ', '),
                         hwset1num: item.HWSet[0],
                         hwset1den: item.HWSet[2],
                         hwset2num: item.HWSet[1],
