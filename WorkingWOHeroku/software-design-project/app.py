@@ -197,7 +197,7 @@ def checkOut_hardware(projectid, hwset, qty, maxQty):
 @app.route('/joinProject/<projectid>/<userID>/<username>', methods=['GET'])
 def joinProject(projectid, userID, username):
     users.update_one({'username': 'user1'},{'$set': {'projects.' + str(projectid): [0,0]}})
-    projects.update_one({'projectID': projectid},{'$set': {'users.' + str(userID):  True}})
+    projects.update_one({'projectID': projectid},{'$push': {'users' :  "user1"}})
     # return "Joined " + projectid
     return projectid
 
@@ -212,7 +212,7 @@ def leaveProject(projectid, userID, username):
     currQty2 = thisPj[1]
     if (currQty1 == 0) & (currQty2 == 0):
         users.update_one({'username': 'user1'},{'$unset': {'projects.' + str(projectid) : ""}})
-        projects.update_one({'projectID': projectid},{'$set': {'users.' + str(userID):  False}})
+        projects.update_one({'projectID': projectid},{'$pull': {'users' :  "user1"}})
         error = False
     else:
         #cannot leave a project if there is still checked out hardware
