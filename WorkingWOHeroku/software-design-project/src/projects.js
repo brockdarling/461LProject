@@ -19,9 +19,11 @@ class Projects extends React.Component {
             HW1num: HW1numtemp,
             HW1den: HW1dentemp,
             HW2num: HW2numtemp,
-            HW2den: HW2dentemp
-            // items: []
+            HW2den: HW2dentemp,
+            createProj: false,
+            projects: SingleProject[{}]
         };
+        // [todos, setTodos] = useState([]);
     }
 
     // getAllProjects() {
@@ -49,18 +51,49 @@ class Projects extends React.Component {
     render() {
         // {this.getAllProjects()}
         return (
-            <div className="projcover">
-                <h1>Projects</h1>
-                {/* {this.renderProjects()} */}
-                
-                <SingleProject name={"ProjectTest"} users={this.state.users} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} />
-                <SingleProject name={this.state.name} users={this.state.users} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} />
-                {/* <SingleProject name={"ProjectTest"} users={this.state.users} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} />
+            <div>
+                <div className="create-proj-div">
+                    <div className="proj-name-div" style={{display:this.state.createProj  ? 'block' : 'none' }}>
+                        {/* <text>
+                            Project Name:
+                        </text> */}
+                        <input className="proj-input" type="text"
+                            placeholder="Enter Name">
+                        </input>
+                    </div>
+                    <button className="create-proj-btn" onClick={() => {
+                        this.handleCreateProj(this.state.createProj
+                        )
+                    }}>
+                        Create Project
+                    </button>
+                </div>
+                <div className="projcover">
+                    {/* <h1>Projects</h1> */}
+                    {/* {this.renderProjects()} */}
+
+                    {this.state.projects}
+                    <SingleProject name={"ProjectTest"} users={this.state.users} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} />
+                    <SingleProject name={this.state.name} users={this.state.users} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} />
+                    {/* <SingleProject name={"ProjectTest"} users={this.state.users} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} />
                 <SingleProject name={"ProjectTest"} users={this.state.users} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} />
                 <SingleProject name={"ProjectTest"} users={this.state.users} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} /> */}
 
-            </div>
+                </div>
+            </div >
         )
+    }
+
+    handleCreateProj(createProj) {
+        if (createProj === false) {
+            this.setState({createProj: true})
+        } else {
+            this.setState({ createProj: false})
+            this.addNewProject()
+        }
+    }
+    addNewProject(){
+        this.setState({projects: ([{SingleProject}, ...this.state.projects])})
     }
 }
 
