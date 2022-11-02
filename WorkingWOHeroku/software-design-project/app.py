@@ -212,7 +212,7 @@ def leaveProject(projectid, userID, username):
     currQty2 = thisPj[1]
     if (currQty1 == 0) & (currQty2 == 0):
         users.update_one({'username': 'user1'},{'$unset': {'projects.' + str(projectid) : ""}})
-        projects.update_one({'projectID': projectid},{'$pull': {'users' : "user1"}})
+        projects.update_one({'projectID': projectid},{'$pull': {'users' :  "user1"}})
         error = False
     else:
         #cannot leave a project if there is still checked out hardware
