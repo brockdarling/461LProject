@@ -1,10 +1,5 @@
 import React, { useState, useRef } from "react";
 import "./hwset.css"
-// import Button from '@mui/material/Button';
-import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
-
-
-
 
 class HWSet extends React.Component {
 
@@ -12,6 +7,7 @@ class HWSet extends React.Component {
         super(props)
         this.state = {
             name: props.name,
+            username: props.username,
             users: props.users,
             HW1num: props.HW1num,
             HW1den: props.HW1den,
@@ -21,6 +17,7 @@ class HWSet extends React.Component {
             hw1Input: 0,
             hw2Input: 0
         }
+        console.log(this.state.username);   
     }
     render() {
         return (

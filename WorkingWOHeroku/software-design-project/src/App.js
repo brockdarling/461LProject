@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-//import UserInfo from './UserInfo';
 import LoginForm from "./loginform.js";
 import Projects from './projects.js';
 import Signup from "./signup.js";

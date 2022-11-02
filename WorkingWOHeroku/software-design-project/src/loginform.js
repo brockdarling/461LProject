@@ -13,7 +13,7 @@ function LoginForm() {
         if (result === null || result === username+" is not a user for the website" || result === password+" is not the correct password") {
             alert("Incorrect username or password");
         } else {
-            navigate('/Projects');
+            navigate('/Projects', {state: {user: username}});
         }
     }
 
