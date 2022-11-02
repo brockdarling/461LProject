@@ -43,7 +43,7 @@ function Signup() {
         if (status) {
             navigate('/Projects'); 
         }
-      };
+    };
 
     const navigateLogin = () => {
         navigate('/');
