@@ -59,7 +59,7 @@ class HWSet extends React.Component {
                         }} variant="text">Check Out</button>
                     </div>
                 </div>
-                <div>
+                <div style = {{width: '10%'}}>
                     <button className="leave-join-btn" onClick={() => {
                         this.handleJoinLeave()
                     }} variant="text">{this.state.joinButton}</button>

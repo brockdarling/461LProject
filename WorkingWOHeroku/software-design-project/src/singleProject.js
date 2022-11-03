@@ -19,8 +19,8 @@ class SingleProject extends React.Component{
     render(){
         return (
             <div className="projectbox">
-                <h2>{this.state.name}</h2>
-                <div style={{color: "#423e3e"}}>{"Users: "}{this.state.users}</div>
+                <h2  style = {{width: '12%'}}>{this.state.name}</h2>
+                <div style={{color: "#423e3e", width: '15%'}}>{"Users: "}{this.state.users}</div>
                 <HWSet name={this.state.name} userID={this.state.userID} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den}></HWSet>
             </div>
         )
