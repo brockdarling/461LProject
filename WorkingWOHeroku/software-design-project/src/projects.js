@@ -34,7 +34,7 @@ function Projects() {
         <div className="projcover">
             <h1>Projects</h1>
             {state.data.map((i) => {
-                return <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} />
+                return i.pid !== "DoNotDelete" ? <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} /> : null
             })}
         </div>
     )

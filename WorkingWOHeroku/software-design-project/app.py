@@ -43,7 +43,7 @@ def newUser(username, password, uid):
     if users.find_one({'uid': uid}):
         return username + " is already a user"
     encryptedPassword = customEncrypt(password, 7, 1)
-    decrypt = customEncrypt(encryptedPassword, 7, -1)
+    # decrypt = customEncrypt(encryptedPassword, 7, -1)
     userData = {
         'username' : username,
         'password' : encryptedPassword,
@@ -64,11 +64,6 @@ def confirm(uid, password):
     if decryptedPassword != password:
         return password + ' is not the correct password'
     return uid + " is a user for the website"
-
-
-# @app.route("/members")
-# def members():
-#     return {"members": ["Member1", "Member2", "Member4"]}
 
     
 # This function queries the projectId and quantity from the URL and returns the
@@ -135,6 +130,7 @@ def checkIn_hardware(projectid, hwset, qty, maxQty):
 
     print(returnData)
     return jsonify(returnData)
+
 
 # This function queries the projectId and quantity from the URL and returns the
 # project id and quantity to the front end. The front end displays a pop-up message
@@ -232,6 +228,30 @@ def getAllProjects():
         del i['_id']
 
     return jsonify(allpjs)
+
+
+# this method creates a new project based on input project id and user id passed into the url
+# redundant projects cannot be created
+@app.route('/createProject/<projectid>/<userid>', methods=['GET','POST'])
+def createProject(projectid, userid):
+    # DoNotDelete is our default project that has initialized hardware set amounts
+    # this project should always exist in the database so new projects can use it as reference to pull initial data
+    if projectid == 'DoNotDelete':
+        return "Invalid project id"
+    if projects.find_one({'projectID': projectid}):
+        return projectid + " already exists"
+    pj = projects.find_one({'projectID': 'DoNotDelete'})
+    newProj = {
+        "projectID": projectid,
+        "HWSet": [pj['HWSet'][0], pj['HWSet'][1], pj['HWSet'][2], pj['HWSet'][3]],
+        "users": [userid]
+    }
+    projects.insert_one(newProj)
+
+    return "Created project " + projectid
+
+
+# do we need an api to delete projects?
 
 
 if __name__ == "__main__":
