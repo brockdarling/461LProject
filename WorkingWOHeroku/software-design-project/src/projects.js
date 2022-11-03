@@ -5,7 +5,7 @@ import SingleProject from "./singleProject";
 
 function Projects() {
     const location = useLocation();
-    const username = location.state.user;
+    const userID = location.state.user;
 
     const [state, setState] = useState({
         data: []
@@ -34,7 +34,7 @@ function Projects() {
         <div className="projcover">
             <h1>Projects</h1>
             {state.data.map((i) => {
-                return <SingleProject name={i.pid} username={username} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} />
+                return <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} />
             })}
         </div>
     )

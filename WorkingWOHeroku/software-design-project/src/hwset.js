@@ -7,7 +7,7 @@ class HWSet extends React.Component {
         super(props)
         this.state = {
             name: props.name,
-            username: props.username,
+            userID: props.userID,
             users: props.users,
             HW1num: props.HW1num,
             HW1den: props.HW1den,
@@ -17,7 +17,7 @@ class HWSet extends React.Component {
             hw1Input: 0,
             hw2Input: 0
         }
-        console.log(this.state.username);   
+        console.log(this.state.userID);   
     }
     render() {
         return (
@@ -51,18 +51,17 @@ class HWSet extends React.Component {
                         />
                         <button onClick={() => {
                             var qty = this.state.hw2Input;
-                            this.handleCheckIn(2, qty, this.state.HW2den)
+                            this.handleCheckIn(2, qty, this.state.HW2den);
                         }} variant="text">Check In</button>
                         <button onClick={() => {
                             var qty = this.state.hw2Input;
-                            this.handleCheckOut(2, qty, this.state.HW2den)
+                            this.handleCheckOut(2, qty, this.state.HW2den);
                         }} variant="text">Check Out</button>
                     </div>
                 </div>
                 <div>
                     <button className="leave-join-btn" onClick={() => {
-                        this.handleJoinLeave(
-                        )
+                        this.handleJoinLeave()
                     }} variant="text">{this.state.joinButton}</button>
                 </div>
             </div>
@@ -156,7 +155,7 @@ class HWSet extends React.Component {
     handleJoinLeave() {
 
         if (this.state.joinButton === 'Join') {
-            fetch('/joinProject/' + this.state.name + '/' + 'user1' + '/' + 'brok')
+            fetch('/joinProject/' + this.state.name + '/' + this.state.userID)
                 .then((response) => {
                     if (response.ok) {
                         try {
@@ -179,7 +178,7 @@ class HWSet extends React.Component {
 
         }
         else {
-            fetch('/leaveProject/' + this.state.name + '/' + 'user1' + '/' + 'brok')
+            fetch('/leaveProject/' + this.state.name + '/' + this.state.userID)
                 .then((response) => {
                     if (response.ok) {
                         try {

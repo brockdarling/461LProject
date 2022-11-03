@@ -40,7 +40,7 @@ projects = projectDB['data']
 
 @app.route("/new/<username>/<password>/<uid>", methods=['GET'])    #need to add {method: 'POST'} to the fetch in signup.js
 def newUser(username, password, uid):
-    if users.find_one({'username': username}):
+    if users.find_one({'uid': uid}):
         return username + " is already a user"
     encryptedPassword = customEncrypt(password, 7, 1)
     decrypt = customEncrypt(encryptedPassword, 7, -1)
@@ -54,21 +54,21 @@ def newUser(username, password, uid):
     return 'done'
     
 
-@app.route("/confirm/<username>/<password>", methods=['GET'])
-def confirm(username, password):
-    signIn = users.find_one({'username' : username})
+@app.route("/confirm/<uid>/<password>", methods=['GET'])
+def confirm(uid, password):
+    signIn = users.find_one({'uid' : uid})
     if not signIn:
-        return username + " is not a user for the website"
+        return uid + " is not a user for the website"
     decryptedPassword = customEncrypt(signIn['password'], 7, -1)
     print(decryptedPassword)
     if decryptedPassword != password:
         return password + ' is not the correct password'
-    return username + " is a user for the website"
+    return uid + " is a user for the website"
 
 
-@app.route("/members")
-def members():
-    return {"members": ["Member1", "Member2", "Member4"]}
+# @app.route("/members")
+# def members():
+#     return {"members": ["Member1", "Member2", "Member4"]}
 
     
 # This function queries the projectId and quantity from the URL and returns the
@@ -181,7 +181,7 @@ def checkOut_hardware(projectid, hwset, qty, maxQty):
         print("here once")
         projects.update_one({'projectID': proj["projectID"]},{'$set': {'HWSet.'+str(hwSet-1): newQty}})
 
-  
+
     returnData = {
         "projectid": projectid,
         "hwset": hwset,
@@ -194,25 +194,25 @@ def checkOut_hardware(projectid, hwset, qty, maxQty):
 
 # This function queries the projectId from the URL and returns the project id to the
 # front end. The front end displays a pop-up message which says “Joined <projectId>”
-@app.route('/joinProject/<projectid>/<userID>/<username>', methods=['GET'])
-def joinProject(projectid, userID, username):
-    users.update_one({'username': 'user1'},{'$set': {'projects.' + str(projectid): [0,0]}})
-    projects.update_one({'projectID': projectid},{'$push': {'users' :  "user1"}})
+@app.route('/joinProject/<projectid>/<userID>', methods=['GET'])
+def joinProject(projectid, userID):
+    users.update_one({'uid': userID},{'$set': {'projects.' + str(projectid): [0,0]}})
+    projects.update_one({'projectID': projectid},{'$push': {'users' :  userID}})
     # return "Joined " + projectid
     return projectid
 
 # This function queries the projectId from the URL and returns the project id to the
 # front end. The front end displays a pop-up message which says “Left <projectId>”
-@app.route('/leaveProject/<projectid>/<userID>/<username>', methods=['GET'])
-def leaveProject(projectid, userID, username):
-    user = users.find_one({'username': 'user1'})
+@app.route('/leaveProject/<projectid>/<userID>', methods=['GET'])
+def leaveProject(projectid, userID):
+    user = users.find_one({'uid': userID})
     pjs = user['projects']
     thisPj = pjs[projectid]
     currQty1 = thisPj[0]
     currQty2 = thisPj[1]
     if (currQty1 == 0) & (currQty2 == 0):
-        users.update_one({'username': 'user1'},{'$unset': {'projects.' + str(projectid) : ""}})
-        projects.update_one({'projectID': projectid},{'$pull': {'users' :  "user1"}})
+        users.update_one({'uid': userID},{'$unset': {'projects.' + str(projectid) : ""}})
+        projects.update_one({'projectID': projectid},{'$pull': {'users' :  userID}})
         error = False
     else:
         #cannot leave a project if there is still checked out hardware

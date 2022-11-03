@@ -14,7 +14,7 @@ function Signup() {
         if (result === null || result === username+" is already a user") {
             alert("This username or userid already exists");
         } else {
-            navigate('/Projects', {state: {user: username}});
+            navigate('/Projects', {state: {user: uid}});
         }
     }
 
