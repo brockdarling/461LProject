@@ -12,15 +12,23 @@ function Projects() {
         data: []
     });
 
-    const [displayCreate, changeDisplayCreate] = useState(true);
+    const [displayCreate, changeDisplayCreate] = useState(false);
 
-    const [displaySelect, changeDisplaySelect] = useState(true);
+    const [displaySelect, changeDisplaySelect] = useState(false);
 
     function handleSelectProject(i) {
         state.data.map((j) => {
             j.display = false;
         });
         i.display = true;
+        changeDisplaySelect(false);
+        forceUpdate();
+    }
+
+    function showAllProjects(){
+        state.data.map((j) => {
+            j.display = true;
+        });
         changeDisplaySelect(false);
         forceUpdate();
     }
@@ -46,7 +54,7 @@ function Projects() {
                         hwset1den: item.HWSet[2],
                         hwset2num: item.HWSet[1],
                         hwset2den: item.HWSet[3],
-                        display: false
+                        display: true
                     })),
                 })
             });
@@ -58,33 +66,33 @@ function Projects() {
                 <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { changeDisplaySelect(!displaySelect) }}>
                     Select Project
                 </button>
-                <button className="create-proj-btn" onClick={() => { changeDisplayCreate(!displayCreate); changeDisplaySelect(false) }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { changeDisplayCreate(!displayCreate); changeDisplaySelect(false) }}>
                     Create Project
                 </button>
                 <div className="create-proj-div-two" style={displayCreate ? { display: 'flex', marginTop: '10px' } : { display: 'none' }}>
-                    <input className="proj-input" placeholder="Project Name">
-                    </input>
-                    <input className="proj-input" placeholder="Authorized Users">
-
-                    </input>
+                    <input className="proj-input" placeholder="Project Name"></input>
+                    <input className="proj-input" placeholder="Authorized Users"></input>
+                </div>
+                <div className="create-proj-btn" style={displayCreate ? { display: 'flex' } : { display: 'none' }}>
+                    <button className="cancel-create-proj" onClick={() => { changeDisplaySelect(false); changeDisplayCreate(false)}}>Create</button>
+                    <text>|</text>
+                    <button className="cancel-create-proj" onClick={() => { changeDisplaySelect(false); changeDisplayCreate(false)}}>Cancel</button>
                 </div>
             </div>
 
             <div className="select-project" style={displaySelect ? { display: 'flex', padding: "10px" } : { display: 'none' }}>
                 {state.data.map((i) => {
-                    return i.pid !== "DoNotDelete" ?  <button onClick={() => handleSelectProject(i)}><SelectProj name={i.pid} userID={userID} users={i.users}/></button> : null
+                    return i.pid !== "DoNotDelete" ? <button className="select-proj-button" onClick={() => handleSelectProject(i)}><SelectProj name={i.pid} userID={userID} users={i.users} /></button> : null
                 })}
+                <button className="create-proj-btn" style={{marginTop: "20px"}} onClick={() => showAllProjects()}>Show All Projects</button>
             </div>
 
             <div className="projcover">
                 {state.data.map((i) => {
-                    return i.pid !== "DoNotDelete" && i.display == true ? <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} /> : null
+                    return i.pid !== "DoNotDelete" && i.display === true ? <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} /> : null
                 })}
             </div>
-
         </div>
-
-
     )
 }
 
