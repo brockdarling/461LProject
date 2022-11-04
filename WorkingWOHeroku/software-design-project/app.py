@@ -38,7 +38,7 @@ users = userDB['random']
 projectDB = client['projects']
 projects = projectDB['data']
 
-@app.route("/new/<username>/<password>/<uid>", methods=['GET'])    #need to add {method: 'POST'} to the fetch in signup.js
+@app.route("/new/<username>/<password>/<uid>",methods=['GET','POST'])    #need to add {method: 'POST'} to the fetch in signup.js
 def newUser(username, password, uid):
     if users.find_one({'uid': uid}):
         return username + " is already a user"
@@ -69,7 +69,7 @@ def confirm(uid, password):
 # This function queries the projectId and quantity from the URL and returns the
 # project id and quantity to the front end. The front end displays a pop-up message
 # which says “<qty> hardware checked in”
-@app.route('/checkIn/<projectid>/<hwset>/<qty>/<maxQty>', methods=['GET'])   #change this to 'PUT' and need to add {method: 'PUT'} to the fetch in hwset.js
+@app.route('/checkIn/<projectid>/<hwset>/<qty>/<maxQty>', methods=['GET','POST'])   #change this to 'PUT' and need to add {method: 'PUT'} to the fetch in hwset.js
 def checkIn_hardware(projectid, hwset, qty, maxQty):
 
     hwSet = int(hwset)
@@ -135,7 +135,7 @@ def checkIn_hardware(projectid, hwset, qty, maxQty):
 # This function queries the projectId and quantity from the URL and returns the
 # project id and quantity to the front end. The front end displays a pop-up message
 # which says “<qty> hardware checked out”
-@app.route('/checkOut/<projectid>/<hwset>/<qty>/<maxQty>', methods=['GET'])
+@app.route('/checkOut/<projectid>/<hwset>/<qty>/<maxQty>', methods=['GET','POST'])
 def checkOut_hardware(projectid, hwset, qty, maxQty):
     hwSet = int(hwset)
     pj = projects.find_one({'projectID': projectid})
@@ -190,7 +190,7 @@ def checkOut_hardware(projectid, hwset, qty, maxQty):
 
 # This function queries the projectId from the URL and returns the project id to the
 # front end. The front end displays a pop-up message which says “Joined <projectId>”
-@app.route('/joinProject/<projectid>/<userID>', methods=['GET'])
+@app.route('/joinProject/<projectid>/<userID>', methods=['GET','POST'])
 def joinProject(projectid, userID):
     users.update_one({'uid': userID},{'$set': {'projects.' + str(projectid): [0,0]}})
     projects.update_one({'projectID': projectid},{'$push': {'users' :  userID}})
@@ -199,7 +199,7 @@ def joinProject(projectid, userID):
 
 # This function queries the projectId from the URL and returns the project id to the
 # front end. The front end displays a pop-up message which says “Left <projectId>”
-@app.route('/leaveProject/<projectid>/<userID>', methods=['GET'])
+@app.route('/leaveProject/<projectid>/<userID>', methods=['GET','POST'])
 def leaveProject(projectid, userID):
     user = users.find_one({'uid': userID})
     pjs = user['projects']
