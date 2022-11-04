@@ -14,14 +14,12 @@ class SelectProj extends React.Component {
     render() {
         return (
             <div>
-                <button className="select-proj-div">
-                    <h3 style={{ width: "30%", textAlign: "left" }}>
-                        {this.state.name}
-                    </h3>
-                    <h4 style={{ width: "60%", textAlign: "left" }}>
-                        Users: {this.state.users}
-                    </h4>
-                </button>
+                <h3 style={{ width: "30%", textAlign: "left" }}>
+                    {this.state.name}
+                </h3>
+                <h4 style={{ width: "60%", textAlign: "left" }}>
+                    Users: {this.state.users}
+                </h4>
             </div>
 
 

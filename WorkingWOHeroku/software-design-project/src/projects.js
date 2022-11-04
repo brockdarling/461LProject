@@ -16,6 +16,21 @@ function Projects() {
 
     const [displaySelect, changeDisplaySelect] = useState(true);
 
+    function handleSelectProject(i) {
+        state.data.map((j) => {
+            j.display = false;
+        });
+        i.display = true;
+        changeDisplaySelect(false);
+        forceUpdate();
+    }
+
+    function useForceUpdate() {
+        let [value, setState] = useState(true);
+        return () => setState(!value);
+    }
+
+    let forceUpdate = useForceUpdate();
 
     useEffect(() => {
         fetch('/allprojects', { methods: 'GET' })
@@ -30,7 +45,8 @@ function Projects() {
                         hwset1num: item.HWSet[0],
                         hwset1den: item.HWSet[2],
                         hwset2num: item.HWSet[1],
-                        hwset2den: item.HWSet[3]
+                        hwset2den: item.HWSet[3],
+                        display: false
                     })),
                 })
             });
@@ -56,17 +72,13 @@ function Projects() {
 
             <div className="select-project" style={displaySelect ? { display: 'flex', padding: "10px" } : { display: 'none' }}>
                 {state.data.map((i) => {
-                    return i.pid !== "DoNotDelete" ?  <SelectProj name={i.pid} userID={userID} users={i.users}/> : null
-                    // return i.pid !== "DoNotDelete" ? <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} /> : null
+                    return i.pid !== "DoNotDelete" ?  <button onClick={() => handleSelectProject(i)}><SelectProj name={i.pid} userID={userID} users={i.users}/></button> : null
                 })}
             </div>
 
             <div className="projcover">
-
-
-                {/* <h1>Projects</h1> */}
                 {state.data.map((i) => {
-                    return i.pid !== "DoNotDelete" ? <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} /> : null
+                    return i.pid !== "DoNotDelete" && i.display == true ? <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} /> : null
                 })}
             </div>
 

@@ -16,8 +16,7 @@ class HWSet extends React.Component {
             joinButton: 'Join',
             hw1Input: 0,
             hw2Input: 0
-        }
-        console.log(this.state.userID);   
+        } 
     }
     render() {
         return (
