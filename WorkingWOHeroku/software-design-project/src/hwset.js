@@ -16,14 +16,14 @@ class HWSet extends React.Component {
             joinButton: 'Join',
             hw1Input: 0,
             hw2Input: 0
-        } 
+        }
     }
     render() {
         return (
             <div className="hwsetinfo">
                 <div className="hwsetbox">
-                    <h4 style={{ width: '200px'}}>HWSet1: {this.state.HW1num}/{this.state.HW1den}</h4>
-                    <h4 style={{ width: '200px'}}>HWSet2: {this.state.HW2num}/{this.state.HW2den}</h4>
+                    <h4 style={{ width: '200px' }}>HWSet1: {this.state.HW1num}/{this.state.HW1den}</h4>
+                    <h4 style={{ width: '200px' }}>HWSet2: {this.state.HW2num}/{this.state.HW2den}</h4>
                 </div>
                 <div className="statusgrid">
                     <div className="statusrow">
@@ -33,11 +33,11 @@ class HWSet extends React.Component {
                             placeholder="Enter Qty"
                         />
 
-                        <button onClick={() => {
+                        <button className="checkinbtn" onClick={() => {
                             var qty = this.state.hw1Input;
                             this.handleCheckIn(1, qty, this.state.HW1den)
                         }} variant="text">Check In</button>
-                        <button onClick={() => {
+                        <button style={{ borderLeft: '0px' }} className="checkinbtn" onClick={() => {
                             var qty = this.state.hw1Input;
                             this.handleCheckOut(1, qty, this.state.HW1den)
                         }} variant="text">Check Out</button>
@@ -48,17 +48,17 @@ class HWSet extends React.Component {
                             type="text"
                             placeholder="Enter Qty"
                         />
-                        <button onClick={() => {
+                        <button className="checkinbtn" onClick={() => {
                             var qty = this.state.hw2Input;
                             this.handleCheckIn(2, qty, this.state.HW2den);
                         }} variant="text">Check In</button>
-                        <button onClick={() => {
+                        <button style={{ borderLeft: '0px' }} className="checkinbtn" onClick={() => {
                             var qty = this.state.hw2Input;
                             this.handleCheckOut(2, qty, this.state.HW2den);
                         }} variant="text">Check Out</button>
                     </div>
                 </div>
-                <div style = {{width: '10%'}}>
+                <div style={{ width: '10%' }}>
                     <button className="leave-join-btn" onClick={() => {
                         this.handleJoinLeave()
                     }} variant="text">{this.state.joinButton}</button>

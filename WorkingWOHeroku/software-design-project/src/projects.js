@@ -25,7 +25,7 @@ function Projects() {
         forceUpdate();
     }
 
-    function showAllProjects(){
+    function showAllProjects() {
         state.data.map((j) => {
             j.display = true;
         });
@@ -74,9 +74,9 @@ function Projects() {
                     <input className="proj-input" placeholder="Authorized Users"></input>
                 </div>
                 <div className="create-proj-btn" style={displayCreate ? { display: 'flex' } : { display: 'none' }}>
-                    <button className="cancel-create-proj" onClick={() => { changeDisplaySelect(false); changeDisplayCreate(false)}}>Create</button>
+                    <button className="cancel-create-proj" onClick={() => { changeDisplaySelect(false); changeDisplayCreate(false) }}>Create</button>
                     <text>|</text>
-                    <button className="cancel-create-proj" onClick={() => { changeDisplaySelect(false); changeDisplayCreate(false)}}>Cancel</button>
+                    <button className="cancel-create-proj" onClick={() => { changeDisplaySelect(false); changeDisplayCreate(false) }}>Cancel</button>
                 </div>
             </div>
 
@@ -84,7 +84,7 @@ function Projects() {
                 {state.data.map((i) => {
                     return i.pid !== "DoNotDelete" ? <button className="select-proj-button" onClick={() => handleSelectProject(i)}><SelectProj name={i.pid} userID={userID} users={i.users} /></button> : null
                 })}
-                <button className="create-proj-btn" style={{marginTop: "20px"}} onClick={() => showAllProjects()}>Show All Projects</button>
+                <button className="create-proj-btn" style={{ marginTop: "20px" }} onClick={() => showAllProjects()}>Show All Projects</button>
             </div>
 
             <div className="projcover">

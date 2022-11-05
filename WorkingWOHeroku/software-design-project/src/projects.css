@@ -16,8 +16,8 @@
 .projcover {
   padding-top: 20px;
   overflow-y: scroll;
-  background-color: #e8ecf2;
-  width: 80vw;
+  /* background-color: #e8ecf2; */
+  width: 100vw;
   height: 90vh;
   position: relative;
   border-radius: 0.3em;
@@ -37,7 +37,7 @@
 }
 
 .projcover::-webkit-scrollbar-thumb {
-  background-color: lightcoral;
+  background-color: teal;
   border-radius: 20px;
   border: 0.5px solid #e8ecf2;
 }
@@ -56,7 +56,6 @@
   border-radius: 9999px;
   box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.2), 5px 5px 10px rgba(0, 0, 0, 0.25);
   cursor: pointer;
-  margin-bottom: 10px;
 }
 
 .create-proj-btn:hover {
@@ -84,16 +83,16 @@
   justify-content: center;
 }
 
-.proj-name-div{
+.proj-name-div {
   margin-right: 10px;
 }
 
-.proj-input{
+.proj-input {
   border: none;
   width: 200px;
   margin-right: 10px;
   margin-left: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
   background-color: #e8ecf2;
   height: 30px;
   text-align: center;
@@ -101,40 +100,41 @@
   border-radius: 0.25em;
 }
 
-.select-project{
-  border: 3px solid lightcoral;
+.select-project {
+  border: 2px solid teal;
   margin-top: 8vh;
-  margin-left: 13vw;
+  margin-left: 23vw;
   overflow-y: scroll;
   width: 54vw;
   height: 70vh;
-  background-color: rgba(123, 169, 179);
+  background-color: rgba(149, 186, 194, 1);
   position: absolute;
   z-index: 1;
-  border-radius: 0.3em;
+  border-radius: 0.1em;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.2), 5px 5px 10px rgba(0, 0, 0, 0.25);
 }
 
 
 .select-project::-webkit-scrollbar {
-  width: 7px;
+  width: 0px;
 }
 
 .select-project::-webkit-scrollbar-track {
-  background:rgba(123, 169, 179);
+  background: rgba(123, 169, 179);
   border-radius: 0.3em;
 }
 
 .select-project::-webkit-scrollbar-thumb {
-  background-color: lightcoral;
+  background-color: teal;
   border-radius: 20px;
   border: 0.5px solid rgba(123, 169, 179);
 }
 
-.cancel-create-proj{
+.cancel-create-proj {
   border: 0;
   margin-left: 10px;
   margin-right: 10px;
@@ -145,7 +145,7 @@
   color: rgb(41, 111, 127);
 }
 
-.show-all-proj{
+.show-all-proj {
   margin-right: 10px;
   margin-left: 10px;
   width: 200px;

@@ -14,20 +14,20 @@ import {
 function App() {
 
   return (
-    <div className = "page">
+    <div className="page">
       <Router>
         <Routes>
 
-          <Route exact path = '/' element={<LoginForm/>} />
-          <Route path = '/Signup' element={<Signup/>} />
-          <Route path = '/Projects' element={<Projects/>} />
+          <Route exact path='/' element={<LoginForm />} />
+          <Route path='/Signup' element={<Signup />} />
+          <Route path='/Projects' element={<Projects />} />
 
           {/* <Redirect to= "/" /> if any route is an error, redirect to login page */}
 
         </Routes>
 
       </Router>
-    
+
     </div>
   );
 }
