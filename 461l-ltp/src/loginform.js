@@ -23,7 +23,7 @@ function LoginForm() {
 
     return (
         <div className="cover">
-            <h1>Login</h1>
+            <h1>Looogin</h1>
             <input style={{ marginTop: '13%' }} id="userID" className="login-input" type="text" placeholder="userID" />
             <input style={{ marginTop: '8%' }} id="password" className="login-input" type="password" placeholder="password" />
 
