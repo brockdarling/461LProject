@@ -27,17 +27,17 @@ after BACKEND changes:
             - comment out 'app = Flask(__name__)'
             - make sure these lines are in app.py for heroku deploy to work:
 
-             *   from flask.helpers import send_from_directory
-             *
-             *   app = Flask(__name__, static_folder='461l-ltp/build', static_url_path='/')
-             *   CORS(app)
-             *
-             *   @app.route('/')
-             *   def serve():
-             *       return send_from_directory(app.static_folder, 'index.html')
-             *
-             *   if __name__ == "__main__":
-             *       app.run()
+                from flask.helpers import send_from_directory
+             
+                app = Flask(__name__, static_folder='461l-ltp/build', static_url_path='/')
+                CORS(app)
+             
+                @app.route('/')
+                def serve():
+                    return send_from_directory(app.static_folder, 'index.html')
+             
+                if __name__ == "__main__":
+                    app.run()
 
         if changes were made directly in heroku-working files instead:
             - move onto step 2
