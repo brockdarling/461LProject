@@ -10,20 +10,26 @@ from flask import request
 import os
 from pymongo import MongoClient
 from encryption import customEncrypt
+from flask.helpers import send_from_directory
 
 import certifi
 ca = certifi.where()
 
 
-app = Flask(__name__, static_folder='./build', static_url_path='/')
+app = Flask(__name__, static_folder='461l-ltp/build', static_url_path='/')
+CORS(app)
 
 # app = Flask(__name__)
 
 # Members API route
-@app.route('/')
-def index():
-    return app.send_static_file('index.html')  
+# @app.route('/')
+# def index():
+#     return app.send_static_file('index.html')  
 # jbG1kDkSwwyZVssJ
+
+@app.route('/')
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
 
 
 client = MongoClient('mongodb+srv://gwills:jbG1kDkSwwyZVssJ@cluster0.kdtylku.mongodb.net/test?retryWrites=true&w=majority', tlsCAFile = ca)
@@ -251,5 +257,6 @@ def not_found(e):
 # do we need an api to delete projects?
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))
+    app.run()
+    # app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))
     # app.run(debug=True)
