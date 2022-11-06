@@ -13,7 +13,7 @@ after FRONTEND changes:
             - you can add/commit/push everything to 'main' branch (if that's easier)
 
 
-    3) changes should automatically deploy to heroku (https://ltp-461l2.herokuapp.com/) after 'main' branch is updated
+    3) changes should automatically deploy to heroku (https://lookintopass461lproject.herokuapp.com/) after 'main' branch is updated
         it might take 1-2 minutes for you to see the changes
 
 
@@ -58,6 +58,6 @@ after BACKEND changes:
             - you can add/commit/push everything to 'main' branch (if that's easier)
 
     
-    4) changes should automatically deploy to heroku (https://ltp-461l2.herokuapp.com/) after 'main' branch is updated
+    4) changes should automatically deploy to heroku (https://lookintopass461lproject.herokuapp.com/) after 'main' branch is updated
         it might take 1-2 minutes for you to see the changes
 
