@@ -1,4 +1,4 @@
-@set "VIRTUAL_ENV=C:\Users\steo school\ltp\venv"
+@set "VIRTUAL_ENV=C:\Users\steo school\LAB461L\mainbranch\461LProject\venv"
 
 @if defined _OLD_VIRTUAL_PROMPT (
     @set "PROMPT=%_OLD_VIRTUAL_PROMPT%"
