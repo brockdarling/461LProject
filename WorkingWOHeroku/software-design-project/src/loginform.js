@@ -8,12 +8,16 @@ function LoginForm() {
     async function confirmUserLogin() {
         var password = document.getElementById("password").value
         var userID = document.getElementById("userID").value
-        const response = await fetch('/confirm/' + userID + '/' + password);
-        const result = await response.text();
-        if (result === null || result === userID+" is not a user for the website" || result === password+" is not the correct password") {
-            alert("Incorrect userID or password");
+        if (userID !== "" && password !== "") {
+            const response = await fetch('/confirm/' + userID + '/' + password);
+            const result = await response.text();
+            if (result === null || result === userID+" is not a user for the website" || result === password+" is not the correct password") {
+                alert("Incorrect userID or password");
+            } else {
+                navigate('/Projects', {state: {user: userID}});
+            } 
         } else {
-            navigate('/Projects', {state: {user: userID}});
+            alert("UserID and Password cannot be empty");
         }
     }
 

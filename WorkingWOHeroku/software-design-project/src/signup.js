@@ -9,12 +9,16 @@ function Signup() {
         var password = document.getElementById("password").value
         var username = document.getElementById("username").value
         var uid = document.getElementById('uid').value
-        const response = await fetch('/new/' + username + '/' + password + '/' + uid);
-        const result = await response.text();
-        if (result === null || result === username+" is already a user") {
-            alert("This username or userid already exists");
+        if (username !== "" && uid !== "" && password !== "") {
+            const response = await fetch('/new/' + username + '/' + password + '/' + uid);
+            const result = await response.text();
+            if (result === null || result === username+" is already a user") {
+                alert("This username or userid already exists");
+            } else {
+                navigate('/Projects', {state: {user: uid}});
+            }
         } else {
-            navigate('/Projects', {state: {user: uid}});
+            alert("Username, UserID, and Password cannot be empty");
         }
     }
 
