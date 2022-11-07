@@ -38,6 +38,28 @@ function Projects() {
         return () => setState(!value);
     }
 
+    async function createProject() {
+        var projectID = document.getElementById("projectID").value.replaceAll(' ', '');
+        var userList = document.getElementById("userList").value.replaceAll(' ', '');
+        var users = userList.split(',');
+        // userList = '["'+userList.replaceAll(',','","')+'"]';
+        if (projectID !== "" && userList !== ""){
+            var requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({userList: users})
+            };
+            await fetch('/createProject/'+projectID+'/'+userID, requestOptions ); 
+        } else if (projectID !== "" && userList === "") {
+            var requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({userList: "all"})
+            };
+            await fetch('/createProject/'+projectID+'/'+userID, requestOptions ); 
+        }
+    }
+
     let forceUpdate = useForceUpdate();
 
     useEffect(() => {
@@ -70,16 +92,19 @@ function Projects() {
                     Create Project
                 </button>
                 <div className="create-proj-div-two" style={displayCreate ? { display: 'flex', marginTop: '10px' } : { display: 'none' }}>
-                    <input className="proj-input" placeholder="Project Name"></input>
-                    <input className="proj-input" placeholder="Authorized Users"></input>
+                    <input id="projectID" className="proj-input" placeholder="Project Name"></input>
+                    <input id="userList" className="proj-input" placeholder="Authorized Users"></input>
+                    <div>
+                        <p>No spaces in projectID and users list</p>
+                        <p>Enter list of users separated by commas</p>
+                    </div>
                 </div>
                 <div className="create-proj-btn" style={displayCreate ? { display: 'flex' } : { display: 'none' }}>
-                    <button className="cancel-create-proj" onClick={() => { changeDisplaySelect(false); changeDisplayCreate(false) }}>Create</button>
+                    <button className="cancel-create-proj" onClick={() => { createProject(); changeDisplaySelect(false); changeDisplayCreate(false) }}>Create</button>
                     <text>|</text>
                     <button className="cancel-create-proj" onClick={() => { changeDisplaySelect(false); changeDisplayCreate(false) }}>Cancel</button>
                 </div>
             </div>
-
             <div className="select-project" style={displaySelect ? { display: 'flex', padding: "10px" } : { display: 'none' }}>
                 {state.data.map((i) => {
                     return i.pid !== "DoNotDelete" ? <button className="select-proj-button" onClick={() => handleSelectProject(i)}><SelectProj name={i.pid} userID={userID} users={i.users} /></button> : null

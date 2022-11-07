@@ -19,7 +19,7 @@ def customEncrypt(inputText, N, D):
         # do backward encryption
         print(inputText)
         for c in reversedText:
-            print(c)
+            # print(c)
             r = ord(c) - 34
             if r - N < 0:
                 r = 93 + (r - N)
@@ -27,6 +27,6 @@ def customEncrypt(inputText, N, D):
                 r -= N
             r += 34
             encryptedText += chr(r)
-            print(encryptedText)
+            # print(encryptedText)
 
     return encryptedText
