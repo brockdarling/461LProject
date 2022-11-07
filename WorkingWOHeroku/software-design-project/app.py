@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Resource, Api, reqparse
 from sqlalchemy import event
@@ -192,8 +192,10 @@ def checkOut_hardware(projectid, hwset, qty, maxQty):
 # front end. The front end displays a pop-up message which says “Joined <projectId>”
 @app.route('/joinProject/<projectid>/<userID>', methods=['GET','POST'])
 def joinProject(projectid, userID):
-    users.update_one({'uid': userID},{'$set': {'projects.' + str(projectid): [0,0]}})
-    projects.update_one({'projectID': projectid},{'$push': {'users' :  userID}})
+    userList = projects.find_one({'projectID': projectid})['users']
+    if userList == 'all' or userID in userList:
+        users.update_one({'uid': userID},{'$set': {'projects.' + str(projectid): [0,0]}})
+        # projects.update_one({'projectID': projectid},{'$push': {'users' :  userID}})
     # return "Joined " + projectid
     return projectid
 
@@ -208,7 +210,7 @@ def leaveProject(projectid, userID):
     currQty2 = thisPj[1]
     if (currQty1 == 0) & (currQty2 == 0):
         users.update_one({'uid': userID},{'$unset': {'projects.' + str(projectid) : ""}})
-        projects.update_one({'projectID': projectid},{'$pull': {'users' :  userID}})
+        # projects.update_one({'projectID': projectid},{'$pull': {'users' :  userID}})
         error = False
     else:
         #cannot leave a project if there is still checked out hardware
@@ -218,7 +220,11 @@ def leaveProject(projectid, userID):
         "projectid": projectid,
         "error" : error
     }
-    return jsonify(returnData)
+    if error == False:
+        return projectid
+    else:
+        return ""
+    # return jsonify(returnData)
     #return projectid
 
 @app.route('/allprojects', methods=['GET'])
@@ -234,6 +240,9 @@ def getAllProjects():
 # redundant projects cannot be created
 @app.route('/createProject/<projectid>/<userid>', methods=['GET','POST'])
 def createProject(projectid, userid):
+    request_data = request.get_json()
+    print(request_data.keys())
+    print(request_data['userList'])
     # DoNotDelete is our default project that has initialized hardware set amounts
     # this project should always exist in the database so new projects can use it as reference to pull initial data
     if projectid == 'DoNotDelete':
@@ -244,7 +253,7 @@ def createProject(projectid, userid):
     newProj = {
         "projectID": projectid,
         "HWSet": [pj['HWSet'][0], pj['HWSet'][1], pj['HWSet'][2], pj['HWSet'][3]],
-        "users": [userid]
+        "users": request_data['userList']
     }
     projects.insert_one(newProj)
 
