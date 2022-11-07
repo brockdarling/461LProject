@@ -76,8 +76,8 @@ class HWSet extends React.Component {
     }
 
 
-    handleCheckIn(hwset, qty, maxQty) {
-        fetch('/checkIn/' + this.state.name + '/' + hwset + '/' + qty + '/' + maxQty)
+    handleCheckIn(hwset, qty) {
+        fetch('/checkIn/' + this.state.name + '/' + hwset + '/' + qty + '/' + this.state.userID)
             .then((response) => {
                 if (response.ok) {
                     try {
@@ -113,9 +113,9 @@ class HWSet extends React.Component {
 
     }
 
-    handleCheckOut(hwset, qty, maxQty) {
+    handleCheckOut(hwset, qty) {
 
-        fetch('/checkOut/' + this.state.name + '/' + hwset + '/' + qty + '/' + maxQty)
+        fetch('/checkOut/' + this.state.name + '/' + hwset + '/' + qty + '/' + this.state.userID)
             .then((response) => {
                 if (response.ok) {
                     try {

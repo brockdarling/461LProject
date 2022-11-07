@@ -100,7 +100,7 @@ function Projects() {
                     </div>
                 </div>
                 <div className="create-proj-btn" style={displayCreate ? { display: 'flex' } : { display: 'none' }}>
-                    <button className="cancel-create-proj" onClick={() => { createProject(); /*changeDisplaySelect(false); changeDisplayCreate(false)*/ }}>Create</button>
+                    <button className="cancel-create-proj" onClick={() => { createProject(); changeDisplaySelect(false); changeDisplayCreate(false) }}>Create</button>
                     <text>|</text>
                     <button className="cancel-create-proj" onClick={() => { changeDisplaySelect(false); changeDisplayCreate(false) }}>Cancel</button>
                 </div>
