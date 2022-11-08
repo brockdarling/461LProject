@@ -12,9 +12,13 @@ function Projects() {
         data: []
     });
 
+    const [userProj, setUserProj] = useState({
+        userPj: 'testagain'
+    });
+
     const [displayCreate, changeDisplayCreate] = useState(false);
 
-    const [displaySelect, changeDisplaySelect] = useState(false);
+    const [displaySelect, changeDisplaySelect] = useState(true);
 
     function handleSelectProject(i) {
         state.data.map((j) => {
@@ -26,6 +30,8 @@ function Projects() {
     }
 
     function showAllProjects() {
+        getUsersAndProject();
+        getAllProjects();
         state.data.map((j) => {
             j.display = true;
         });
@@ -41,29 +47,65 @@ function Projects() {
     async function createProject() {
         var projectID = document.getElementById("projectID").value.replaceAll(' ', '');
         var userList = document.getElementById("userList").value.replaceAll(' ', '');
+        if (userList !== "" && !userList.contains(userID)) userList = userID+','+userList;
         var users = userList.split(',');
-        // userList = '["'+userList.replaceAll(',','","')+'"]';
         if (projectID !== "" && userList !== ""){
             var requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({userList: users})
             };
-            await fetch('/createProject/'+projectID+'/'+userID, requestOptions ); 
+            const response = await fetch('/createProject/'+projectID+'/'+userID, requestOptions);
+            const result = await response.text(); 
+            alert(result);
         } else if (projectID !== "" && userList === "") {
             var requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({userList: "all"})
             };
-            await fetch('/createProject/'+projectID+'/'+userID, requestOptions ); 
+            const response = await fetch('/createProject/'+projectID+'/'+userID, requestOptions); 
+            const result = await response.text();
+            alert(result);
         }
+        showAllProjects();
     }
 
     let forceUpdate = useForceUpdate();
 
+    async function getUsersAndProject() {
+        const response = await fetch('/getUsersProjects', { methods: 'GET' });
+        const result = await response.json();
+        var i = 0;
+        for (i = 0; i < result.length; i++) {
+            if (result[i].uid === userID) {
+                setUserProj({                
+                    userPj: (Object.keys(result[i].projects))
+                });
+            }
+        }
+    }
+
+    async function getAllProjects() {
+        const response = await fetch('/allprojects', { methods: 'GET' })
+        const result = await response.json();
+        setState({
+            data: result.map(item => ({
+                pid: item.projectID,
+                users: JSON.stringify(item.users).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll(',', ', '),
+                hwset1num: item.HWSet[0],
+                hwset1den: item.HWSet[2],
+                hwset2num: item.HWSet[1],
+                hwset2den: item.HWSet[3],
+                creator: item.creator,
+                display: true
+            }))
+        });
+    }
+
     useEffect(() => {
-        fetch('/allprojects', { methods: 'GET' })
+        if (displaySelect) {
+            fetch('/allprojects', { methods: 'GET' })
             .then(response => {
                 return response.json();
             })
@@ -76,16 +118,38 @@ function Projects() {
                         hwset1den: item.HWSet[2],
                         hwset2num: item.HWSet[1],
                         hwset2den: item.HWSet[3],
+                        creator: item.creator,
                         display: true
                     })),
                 })
             });
-    }, [])
+        }
+    }, [displaySelect])
+
+    useEffect(() => {
+        if (displaySelect) {
+            fetch('/getUsersProjects', { methods: 'GET' })
+                .then(response => {
+                    return response.json();
+                })
+                .then((jsonData) => {
+                    var i = 0;
+                    for (i = 0; i < jsonData.length; i++) {
+                        if (jsonData[i].uid === userID) {
+                            // console.log(jsonData[i].uid + ": " + userID + ": " + Object.keys(jsonData[i].projects)[0]);
+                            setUserProj({                
+                                userPj: (Object.keys(jsonData[i].projects)[0])
+                            });
+                        }
+                    }
+                })
+        }
+    }, [displaySelect, userID])
 
     return (
         <div>
             <div className="create-proj-div">
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { changeDisplaySelect(!displaySelect) }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getUsersAndProject(); getAllProjects(); changeDisplaySelect(!displaySelect); }}>
                     Select Project
                 </button>
                 <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { changeDisplayCreate(!displayCreate); changeDisplaySelect(false) }}>
@@ -113,9 +177,13 @@ function Projects() {
             </div>
 
             <div className="projcover">
-                {state.data.map((i) => {
-                    return i.pid !== "DoNotDelete" && i.display === true ? <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} /> : null
-                })}
+                {!displaySelect ? state.data.map((i) => {
+                    return i.pid !== "DoNotDelete" && i.display === true ? 
+                                (i.pid === userProj.userPj ?
+                                    <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Leave'} />
+                                    : <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Join'} />)
+                                : null
+                }) : ""}
             </div>
         </div>
     )

@@ -13,7 +13,7 @@ class HWSet extends React.Component {
             HW1den: props.HW1den,
             HW2num: props.HW2num,
             HW2den: props.HW2den,
-            joinButton: 'Join',
+            joinButton: props.joinState,
             hw1Input: 0,
             hw2Input: 0
         }
@@ -169,10 +169,10 @@ class HWSet extends React.Component {
                     if (data == null) {
                         alert("Some error occurred");
                     } else {
-                        var projectid = data
-                        alert("Joined " + projectid)
+                        alert(data)
                     }
                 });
+            //TODO: fix this so that it doesn't change state if the project is not joined
             this.setState({ joinButton: 'Leave' })
 
         }
@@ -191,11 +191,13 @@ class HWSet extends React.Component {
                 .then((data) => {
                     if (data == null) {
                         alert("Some error occurred");
+                    } else if (data == "") {
+                        alert("Cannot leave project without checking in remaining hardware")
                     } else {
-                        var projectid = data
-                        alert("Left " + projectid)
+                        alert("Left " + data)
                     }
                 });
+            //TODO: fix this so that it doesn't change state if the project cannot be left
             this.setState({ joinButton: 'Join' })
         }
     }

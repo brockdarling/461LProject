@@ -60,7 +60,7 @@ def confirm(uid, password):
     if not signIn:
         return uid + " is not a user for the website"
     decryptedPassword = customEncrypt(signIn['password'], 7, -1)
-    print(decryptedPassword)
+    # print(decryptedPassword)
     if decryptedPassword != password:
         return password + ' is not the correct password'
     return uid + " is a user for the website"
@@ -118,7 +118,7 @@ def checkIn_hardware(projectid, hwset, qty, userID):
 
     allPjs = projects.find({})
     for proj in allPjs:
-        print("here once")
+        # print("here once")
         projects.update_one({'projectID': proj["projectID"]},{'$set': {'HWSet.'+str(hwSet-1): newQty}})
 
     returnData = {
@@ -127,7 +127,7 @@ def checkIn_hardware(projectid, hwset, qty, userID):
         "qty": newQty,
         "setsCheckedIn": setsCheckedIn}
 
-    print(returnData)
+    # print(returnData)
     return jsonify(returnData)
 
 
@@ -173,7 +173,7 @@ def checkOut_hardware(projectid, hwset, qty, userID):
 
     allPjs = projects.find({})
     for proj in allPjs:
-        print("here once")
+        # print("here once")
         projects.update_one({'projectID': proj["projectID"]},{'$set': {'HWSet.'+str(hwSet-1): newQty}})
 
 
@@ -193,9 +193,10 @@ def joinProject(projectid, userID):
     userList = projects.find_one({'projectID': projectid})['users']
     if userList == 'all' or userID in userList:
         users.update_one({'uid': userID},{'$set': {'projects.' + str(projectid): [0,0]}})
+        return "Joined "+projectid
         # projects.update_one({'projectID': projectid},{'$push': {'users' :  userID}})
     # return "Joined " + projectid
-    return projectid
+    return "Can not join"+projectid
 
 # This function queries the projectId from the URL and returns the project id to the
 # front end. The front end displays a pop-up message which says “Left <projectId>”
@@ -206,6 +207,8 @@ def leaveProject(projectid, userID):
     thisPj = pjs[projectid]
     currQty1 = thisPj[0]
     currQty2 = thisPj[1]
+    # print(currQty1)
+    # print(currQty2)
     if (currQty1 == 0) & (currQty2 == 0):
         users.update_one({'uid': userID},{'$unset': {'projects.' + str(projectid) : ""}})
         # projects.update_one({'projectID': projectid},{'$pull': {'users' :  userID}})
@@ -239,8 +242,8 @@ def getAllProjects():
 @app.route('/createProject/<projectid>/<userid>', methods=['GET','POST'])
 def createProject(projectid, userid):
     request_data = request.get_json()
-    print(request_data.keys())
-    print(request_data['userList'])
+    # print(request_data.keys())
+    # print(request_data['userList'])
     # DoNotDelete is our default project that has initialized hardware set amounts
     # this project should always exist in the database so new projects can use it as reference to pull initial data
     if projectid == 'DoNotDelete':
@@ -251,11 +254,22 @@ def createProject(projectid, userid):
     newProj = {
         "projectID": projectid,
         "HWSet": [pj['HWSet'][0], pj['HWSet'][1], pj['HWSet'][2], pj['HWSet'][3]],
+        "creator": userid,
         "users": request_data['userList']
     }
     projects.insert_one(newProj)
 
     return "Created project " + projectid
+
+
+@app.route('/getUsersProjects', methods=['GET'])
+def getProjectsUsersHaveJoined():
+    usersProjects = list(users.find({}, {'uid':1, 'projects':1}))
+    # print(usersProjects)
+    for i in usersProjects:
+        del i['_id']
+    return (usersProjects)
+
 
 
 # do we need an api to delete projects?
