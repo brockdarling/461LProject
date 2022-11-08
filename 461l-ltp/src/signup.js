@@ -5,6 +5,10 @@ import { useNavigate } from "react-router-dom";
 function Signup() {
     const navigate = useNavigate();
 
+    const refreshPage = () => {
+        navigate(0);
+    }
+
     async function addNewUserToDB() {
         var password = document.getElementById("password").value
         var username = document.getElementById("username").value

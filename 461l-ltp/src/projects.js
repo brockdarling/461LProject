@@ -3,8 +3,15 @@ import { useLocation } from 'react-router-dom';
 import "./projects.css"
 import SingleProject from "./singleProject";
 import SelectProj from "./selectProj";
+import { useNavigate } from "react-router-dom";
 
 function Projects() {
+    const navigate = useNavigate();
+
+    const refreshPage = () => {
+        navigate(0);
+    }
+
     const location = useLocation();
     const userID = location.state.user;
 
@@ -88,8 +95,11 @@ function Projects() {
                 <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { changeDisplaySelect(!displaySelect) }}>
                     Select Project
                 </button>
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { changeDisplayCreate(!displayCreate); changeDisplaySelect(false) }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { changeDisplayCreate(!displayCreate); changeDisplaySelect(false)}}>
                     Create Project
+                </button>
+                <button className="create-proj-btn" onClick={refreshPage}>
+                    Refresh
                 </button>
                 <div className="create-proj-div-two" style={displayCreate ? { display: 'flex', marginTop: '10px' } : { display: 'none' }}>
                     <input id="projectID" className="proj-input" placeholder="Project Name"></input>
