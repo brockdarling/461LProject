@@ -9,7 +9,7 @@ function Projects() {
     const navigate = useNavigate();
 
     const refreshPage = () => {
-        navigate(0);
+        navigate('/Projects');
     }
 
     const location = useLocation();
