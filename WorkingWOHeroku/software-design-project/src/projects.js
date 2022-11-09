@@ -47,7 +47,8 @@ function Projects() {
     async function createProject() {
         var projectID = document.getElementById("projectID").value.replaceAll(' ', '');
         var userList = document.getElementById("userList").value.replaceAll(' ', '');
-        if (userList !== "" && !userList.contains(userID)) userList = userID+','+userList;
+        console.log(userList);
+        if (userList !== "" && !userList.includes(userID)) userList = userID+','+userList;
         var users = userList.split(',');
         if (projectID !== "" && userList !== ""){
             var requestOptions = {
