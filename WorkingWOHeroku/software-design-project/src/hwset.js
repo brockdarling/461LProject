@@ -1,10 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./hwset.css"
-// import Button from '@mui/material/Button';
-import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
-
-
-
 
 class HWSet extends React.Component {
 
@@ -12,102 +7,77 @@ class HWSet extends React.Component {
         super(props)
         this.state = {
             name: props.name,
+            userID: props.userID,
             users: props.users,
             HW1num: props.HW1num,
             HW1den: props.HW1den,
             HW2num: props.HW2num,
             HW2den: props.HW2den,
-            joinButton: 'Join'
+            joinButton: props.joinState,
+            hw1Input: 0,
+            hw2Input: 0
         }
     }
     render() {
         return (
             <div className="hwsetinfo">
                 <div className="hwsetbox">
-                    <h4>HWSet1: {this.state.HW1num}/{this.state.HW1den}</h4>
-                    <h4>HWSet2: {this.state.HW2num}/{this.state.HW2den}</h4>
+                    <h4 style={{ width: '200px' }}>HWSet1: {this.state.HW1num}/{this.state.HW1den}</h4>
+                    <h4 style={{ width: '200px' }}>HWSet2: {this.state.HW2num}/{this.state.HW2den}</h4>
                 </div>
                 <div className="statusgrid">
                     <div className="statusrow">
-                        <input
-                            className="hw-input" 
+                        <input onChange={this.handleHW1Input}
+                            className="hw-input"
                             type="text"
                             placeholder="Enter Qty"
-                            id="hw1qty"
                         />
-                        <button onClick={() => {
-                            var qty = document.getElementById("hw1qty").value
+
+                        <button className="checkinbtn" onClick={() => {
+                            var qty = this.state.hw1Input;
                             this.handleCheckIn(1, qty)
                         }} variant="text">Check In</button>
-                        <button onClick={() => {
-                            var qty = document.getElementById("hw1qty").value
+                        <button style={{ borderLeft: '0px' }} className="checkinbtn" onClick={() => {
+                            var qty = this.state.hw1Input;
                             this.handleCheckOut(1, qty)
                         }} variant="text">Check Out</button>
                     </div>
                     <div className="statusrow">
-                        <input 
+                        <input onChange={this.handleHW2Input}
                             className="hw-input"
                             type="text"
                             placeholder="Enter Qty"
-                            id="hw2qty"
                         />
-                        <button onClick={() => {
-                            var qty = document.getElementById("hw2qty").value
-                            this.handleCheckIn(2, qty)
+                        <button className="checkinbtn" onClick={() => {
+                            var qty = this.state.hw2Input;
+                            this.handleCheckIn(2, qty);
                         }} variant="text">Check In</button>
-                        <button onClick={() => {
-                            var qty = document.getElementById("hw2qty").value
-                            this.handleCheckOut(2, qty)
+                        <button style={{ borderLeft: '0px' }} className="checkinbtn" onClick={() => {
+                            var qty = this.state.hw2Input;
+                            this.handleCheckOut(2, qty);
                         }} variant="text">Check Out</button>
                     </div>
                 </div>
-                <div>
-                    <button className = "leave-join-btn" onClick={() => {
-                        this.handleJoinLeave(
-                        )
+                <div style={{ width: '10%' }}>
+                    <button className="leave-join-btn" onClick={() => {
+                        this.handleJoinLeave()
                     }} variant="text">{this.state.joinButton}</button>
                 </div>
             </div>
         );
     }
 
-
-    handleCheckIn(hwset, qty) {
-
-
-        fetch('/checkIn/' + this.state.name + '/' + hwset + '/' + qty)
-            .then((response) => {
-                if (response.ok) {
-                    try {
-                        return response.json();
-                    }
-                    catch (e) {
-                        console.log("Could not parse as text")
-                    }
-                }
-            })
-            .then((data) => {
-                if (data == null) {
-                    alert("Some error occurred");
-                } else {
-                    // var projid = data["projectid"]
-                    var hwsetval = data["hwset"]
-                    if(hwset == 1){
-                        this.state.HW1num.setState(this.state.HW1num - hwsetval)
-                    }
-                    else{
-                        this.state.HW2num.setState(this.state.HW1num - hwsetval)
-                    }
-                    var quantity = data["qty"]
-                    alert(quantity + " hardware checked in from HWSet" + hwsetval)
-                }
-            });
-
+    handleHW1Input = (event) => {
+        this.setState({ hw1Input: event.target.value })
     }
 
-    handleCheckOut(hwset, qty) {
+    handleHW2Input = (even) => {
+        this.setState({ hw2Input: even.target.value })
+    }
 
-        fetch('/checkOut/' + this.state.name + '/' + hwset + '/' + qty)
+
+    async handleCheckIn(hwset, qty) {
+        await fetch('/checkIn/' + this.state.name + '/' + hwset + '/' + qty + '/' + this.state.userID)
             .then((response) => {
                 if (response.ok) {
                     try {
@@ -125,58 +95,85 @@ class HWSet extends React.Component {
                     // var projid = data["projectid"]
                     var hwsetval = data["hwset"]
                     var quantity = data["qty"]
-                    alert(quantity + " hardware checked out from HWSet" + hwsetval)
+                    var setsCheckedIn = data["setsCheckedIn"]
+                    if (hwset == 1) {
+                        this.setState({ HW1num: quantity });
+                    }
+                    else {
+                        this.setState({ HW2num: quantity });
+                    }
+                    if (setsCheckedIn == 0) {
+                        alert("No Sets Checked In");
+                    }
+                    else {
+                        alert(setsCheckedIn + " hardware checked in from HWSet" + hwsetval)
+                    }
                 }
             });
 
     }
 
-    handleJoinLeave() {
+    async handleCheckOut(hwset, qty) {
 
+        await fetch('/checkOut/' + this.state.name + '/' + hwset + '/' + qty + '/' + this.state.userID)
+            .then((response) => {
+                if (response.ok) {
+                    try {
+                        return response.json();
+                    }
+                    catch (e) {
+                        console.log("Could not parse as text")
+                    }
+                }
+            })
+            .then((data) => {
+                if (data == null) {
+                    alert("Some error occurred");
+                } else {
+                    // var projid = data["projectid"]
+                    var hwsetval = data["hwset"]
+                    var quantity = data["qty"]
+                    var setsCheckedOut = data["setsCheckedOut"]
+                    if (hwset == 1) {
+                        this.setState({ HW1num: quantity });
+                    }
+                    else {
+                        this.setState({ HW2num: quantity });
+                    }
+                    if (setsCheckedOut == 0) {
+                        alert("No Sets Checked Out");
+                    }
+                    else {
+                        alert(setsCheckedOut + " hardware checked out from HWSet" + hwsetval)
+                    }
+                }
+            });
+
+    }
+
+    async handleJoinLeave() {
         if (this.state.joinButton === 'Join') {
-            fetch('/joinProject/' + this.state.name)
-                .then((response) => {
-                    if (response.ok) {
-                        try {
-                            return response.text();
-                        }
-                        catch (e) {
-                            console.log("Could not parse as text")
-                        }
-                    }
-                })
-                .then((data) => {
-                    if (data == null) {
-                        alert("Some error occurred");
-                    } else {
-                        var projectid = data
-                        alert("Joined " + projectid)
-                    }
-                });
-            this.setState({ joinButton: 'Leave' })
-
-        }
-        else {
-            fetch('/leaveProject/' + this.state.name)
-                .then((response) => {
-                    if (response.ok) {
-                        try {
-                            return response.text();
-                        }
-                        catch (e) {
-                            console.log("Could not parse as text")
-                        }
-                    }
-                })
-                .then((data) => {
-                    if (data == null) {
-                        alert("Some error occurred");
-                    } else {
-                        var projectid = data
-                        alert("Left " + projectid)
-                    }
-                });
-            this.setState({ joinButton: 'Join' })
+            const response = await fetch('/joinProject/' + this.state.name + '/' + this.state.userID);
+            const result = await response.text();
+            if (result === null) {
+                alert("Some error occurred");
+            } else if (result.includes("Cannot join")) {
+                alert(result);
+            } else {
+                alert(result);
+                this.setState({ joinButton: 'Leave' })
+            }
+        } else {
+            const response = await fetch('/leaveProject/' + this.state.name + '/' + this.state.userID);
+            const result = await response.text();
+            if (result === null) {
+                alert("Some error occurred");
+            } else if (result === "") {
+                alert("Cannot leave project without checking in remaining hardware");
+            } else {
+                alert("Left " + result);
+                this.setState({ joinButton: 'Join' });
+            }
         }
     }
 }
