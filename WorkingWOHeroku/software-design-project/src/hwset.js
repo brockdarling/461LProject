@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import "./hwset.css"
 
 class HWSet extends React.Component {
@@ -81,7 +81,7 @@ class HWSet extends React.Component {
         if (qty !== 0 && qty !== "") {
             const response = await fetch('/checkIn/' + this.state.name + '/' + hwset + '/' + qty + '/' + this.state.userID);
             const resultText = await response.text();
-            if (resultText == "") {
+            if (resultText === "") {
                 alert("Some error occurred");
             } else if (resultText === "Must join project in order to checkin hardware"){
                 alert(resultText);
@@ -90,13 +90,13 @@ class HWSet extends React.Component {
                 var hwsetval = result["hwset"]
                 var quantity = result["qty"]
                 var setsCheckedIn = result["setsCheckedIn"]
-                if (hwset == 1) {
+                if (hwset === 1) {
                     this.setState({ HW1num: quantity });
                 }
                 else {
                     this.setState({ HW2num: quantity });
                 }
-                if (setsCheckedIn == 0) {
+                if (setsCheckedIn === 0) {
                     alert("No Sets Checked In");
                 }
                 else {
@@ -120,13 +120,13 @@ class HWSet extends React.Component {
                 var hwsetval = result["hwset"]
                 var quantity = result["qty"]
                 var setsCheckedOut = result["setsCheckedOut"]
-                if (hwset == 1) {
+                if (hwset === 1) {
                     this.setState({ HW1num: quantity });
                 }
                 else {
                     this.setState({ HW2num: quantity });
                 }
-                if (setsCheckedOut == 0) {
+                if (setsCheckedOut === 0) {
                     alert("No Sets Checked Out");
                 }
                 else {
