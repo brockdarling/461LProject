@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./singleProject.css"
 import HWSet from "./hwset";
 
@@ -13,7 +13,8 @@ class SingleProject extends React.Component {
             HW1den: props.HW1den,
             HW2num: props.HW2num,
             HW2den: props.HW2den,
-            joinState: props.joinState
+            joinState: props.joinState,
+            refreshProject: props.refreshProject
         };
     }
     render() {
@@ -22,7 +23,7 @@ class SingleProject extends React.Component {
             <div className="projectbox">
                 <h2 style={{ paddingLeft: '40px', width: '16%', overflow: "hidden" }}>{this.state.name}</h2>
                 <div style={{ color: "#423e3e", width: '15%' }}>{"Users: "}{this.state.users}</div>
-                <HWSet name={this.state.name} userID={this.state.userID} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} joinState={this.state.joinState}></HWSet>
+                <HWSet refreshProject={this.state.refreshProject} name={this.state.name} userID={this.state.userID} HW1num={this.state.HW1num} HW1den={this.state.HW1den} HW2num={this.state.HW2num} HW2den={this.state.HW2den} joinState={this.state.joinState}></HWSet>
             </div>
         )
     }
