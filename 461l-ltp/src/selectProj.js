@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./selectProj.css"
 
 class SelectProj extends React.Component {
@@ -13,7 +13,7 @@ class SelectProj extends React.Component {
 
     render() {
         return (
-            <div className="select-proj-div">
+            <div className="select-proj-div" >
                 <h3 style={{ width: "30%", textAlign: "left" }}>
                     {this.state.name}
                 </h3>

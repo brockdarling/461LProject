@@ -12,9 +12,17 @@ function Projects() {
         data: []
     });
 
+    const [userProj, setUserProj] = useState({
+        userPj: 'testagain'
+    });
+
     const [displayCreate, changeDisplayCreate] = useState(false);
 
-    const [displaySelect, changeDisplaySelect] = useState(false);
+    const [displaySelect, changeDisplaySelect] = useState(true);
+
+    const [creatorProj, showCreatorProj] = useState(false);
+
+    const [displayPopup, changePopupDisplay] = useState(false);
 
     function handleSelectProject(i) {
         state.data.map((j) => {
@@ -26,6 +34,8 @@ function Projects() {
     }
 
     function showAllProjects() {
+        getUsersAndProject();
+        getAllProjects();
         state.data.map((j) => {
             j.display = true;
         });
@@ -41,67 +51,135 @@ function Projects() {
     async function createProject() {
         var projectID = document.getElementById("projectID").value.replaceAll(' ', '');
         var userList = document.getElementById("userList").value.replaceAll(' ', '');
+        console.log(userList);
+        if (userList !== "" && !userList.includes(userID)) userList = userID+','+userList;
         var users = userList.split(',');
-        // userList = '["'+userList.replaceAll(',','","')+'"]';
-        if (projectID !== "" && userList !== ""){
+        if (projectID !== "" && userList !== "") {
             var requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({userList: users})
+                body: JSON.stringify({ userList: users })
             };
-            await fetch('/createProject/'+projectID+'/'+userID, requestOptions ); 
+            const response = await fetch('/createProject/' + projectID + '/' + userID, requestOptions);
+            const result = await response.text();
+            alert(result);
         } else if (projectID !== "" && userList === "") {
             var requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({userList: "all"})
+                body: JSON.stringify({ userList: "all" })
             };
-            await fetch('/createProject/'+projectID+'/'+userID, requestOptions ); 
+            const response = await fetch('/createProject/' + projectID + '/' + userID, requestOptions);
+            const result = await response.text();
+            alert(result);
         }
+        showAllProjects();
     }
 
     let forceUpdate = useForceUpdate();
 
+    async function getUsersAndProject() {
+        const response = await fetch('/getUsersProjects', { methods: 'GET' });
+        const result = await response.json();
+        var i = 0;
+        for (i = 0; i < result.length; i++) {
+            if (result[i].uid === userID) {
+                setUserProj({
+                    userPj: (Object.keys(result[i].projects))
+                });
+            }
+        }
+    }
+
+    async function getAllProjects() {
+        const response = await fetch('/allprojects', { methods: 'GET' })
+        const result = await response.json();
+        setState({
+            data: result.map(item => ({
+                pid: item.projectID,
+                users: JSON.stringify(item.users).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll(',', ', '),
+                hwset1num: item.HWSet[0],
+                hwset1den: item.HWSet[2],
+                hwset2num: item.HWSet[1],
+                hwset2den: item.HWSet[3],
+                creator: item.creator,
+                display: true
+            }))
+        });
+    }
+
     useEffect(() => {
-        fetch('/allprojects', { methods: 'GET' })
-            .then(response => {
-                return response.json();
-            })
-            .then((jsonData) => {
-                setState({
-                    data: jsonData.map(item => ({
-                        pid: item.projectID,
-                        users: JSON.stringify(item.users).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll(',', ', '),
-                        hwset1num: item.HWSet[0],
-                        hwset1den: item.HWSet[2],
-                        hwset2num: item.HWSet[1],
-                        hwset2den: item.HWSet[3],
-                        display: true
-                    })),
+        if (displaySelect) {
+            fetch('/allprojects', { methods: 'GET' })
+                .then(response => {
+                    return response.json();
                 })
-            });
-    }, [])
+                .then((jsonData) => {
+                    setState({
+                        data: jsonData.map(item => ({
+                            pid: item.projectID,
+                            users: JSON.stringify(item.users).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll(',', ', '),
+                            hwset1num: item.HWSet[0],
+                            hwset1den: item.HWSet[2],
+                            hwset2num: item.HWSet[1],
+                            hwset2den: item.HWSet[3],
+                            creator: item.creator,
+                            display: true
+                        })),
+                    })
+                });
+        }
+    }, [displaySelect])
+
+    // consolidate useEffects
+    useEffect(() => {
+        if (displaySelect) {
+            fetch('/getUsersProjects', { methods: 'GET' })
+                .then(response => {
+                    return response.json();
+                })
+                .then((jsonData) => {
+                    var i = 0;
+                    for (i = 0; i < jsonData.length; i++) {
+                        if (jsonData[i].uid === userID) {
+                            setUserProj({
+                                userPj: (Object.keys(jsonData[i].projects)[0])
+                            });
+                        }
+                    }
+                })
+        }
+    }, [displaySelect, userID])
 
     return (
         <div>
             <div className="create-proj-div">
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { changeDisplaySelect(!displaySelect) }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getUsersAndProject(); getAllProjects(); showCreatorProj(false); changeDisplaySelect(!displaySelect); }}>
                     Select Project
                 </button>
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { changeDisplayCreate(!displayCreate); changeDisplaySelect(false) }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { showCreatorProj(true); changeDisplaySelect(false); }}>
+                    My Projects
+                </button>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { showCreatorProj(false); changeDisplayCreate(!displayCreate); changeDisplaySelect(false) }}>
                     Create Project
                 </button>
+
                 <div className="create-proj-div-two" style={displayCreate ? { display: 'flex', marginTop: '10px' } : { display: 'none' }}>
-                    <input id="projectID" className="proj-input" placeholder="Project Name"></input>
-                    <input id="userList" className="proj-input" placeholder="Authorized Users"></input>
-                    <div>
+                    <div onMouseEnter={() => { changePopupDisplay(true); }} onMouseLeave={() => { changePopupDisplay(false); }}>
+                        <input id="projectID" className="proj-input" placeholder="Project Name"></input>
+                    </div>
+                    <div onMouseEnter={() => { changePopupDisplay(true); }} onMouseLeave={() => { changePopupDisplay(false); }}>
+                        <input id="userList" className="proj-input" placeholder="Authorized Users"></input>
+                    </div>
+
+                    <div className="create-proj-popup" style={displayPopup ? { display: 'block' } : { display: 'none' }}>
                         <p>No spaces in projectID and users list</p>
                         <p>Enter list of users separated by commas</p>
                     </div>
                 </div>
                 <div className="create-proj-btn" style={displayCreate ? { display: 'flex' } : { display: 'none' }}>
                     <button className="cancel-create-proj" onClick={() => { createProject(); changeDisplaySelect(false); changeDisplayCreate(false) }}>Create</button>
-                    <text>|</text>
+                    |
                     <button className="cancel-create-proj" onClick={() => { changeDisplaySelect(false); changeDisplayCreate(false) }}>Cancel</button>
                 </div>
             </div>
@@ -113,9 +191,21 @@ function Projects() {
             </div>
 
             <div className="projcover">
-                {state.data.map((i) => {
-                    return i.pid !== "DoNotDelete" && i.display === true ? <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} /> : null
-                })}
+                {!displaySelect && !creatorProj ? 
+                state.data.map((i) => {
+                    return i.pid !== "DoNotDelete" && i.display === true ?
+                        (i.pid === userProj.userPj ?
+                            <SingleProject refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Leave'} />
+                            : <SingleProject refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Join'} />)
+                        : null
+                }) : 
+                (!displaySelect && creatorProj ? state.data.map((i) => {
+                    return i.pid !== "DoNotDelete" && i.display === true ?
+                        (i.pid === userProj.userPj ?
+                            (i.creator === userID ? <SingleProject refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Leave'} /> : null)
+                            : (i.creator === userID ? <SingleProject refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Join'} /> : null))
+                        : null
+                }) : null)}
             </div>
         </div>
     )
