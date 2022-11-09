@@ -157,7 +157,7 @@ class HWSet extends React.Component {
             const result = await response.text();
             if (result === null) {
                 alert("Some error occurred");
-            } else if (result === "Cannot join "+this.state.name) {
+            } else if (result.includes("Cannot join")) {
                 alert(result);
             } else {
                 alert(result);

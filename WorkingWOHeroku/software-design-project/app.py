@@ -190,6 +190,9 @@ def checkOut_hardware(projectid, hwset, qty, userID):
 # front end. The front end displays a pop-up message which says “Joined <projectId>”
 @app.route('/joinProject/<projectid>/<userID>', methods=['GET','POST'])
 def joinProject(projectid, userID):
+    user = users.find_one({'uid': userID})
+    if len(user['projects']) == 1:
+        return "Cannot join more than one project at a time"
     userList = projects.find_one({'projectID': projectid})['users']
     if userList == 'all' or userID in userList:
         users.update_one({'uid': userID},{'$set': {'projects.' + str(projectid): [0,0]}})
