@@ -16,7 +16,9 @@ class HWSet extends React.Component {
             joinButton: props.joinState,
             hw1Input: 0,
             hw2Input: 0,
-            refreshProject: props.refreshProject
+            refreshProject: props.refreshProject,
+            viewSingle: props.view,
+            updateDisp: props.updateDisp
         }
     }
     render() {
@@ -76,6 +78,9 @@ class HWSet extends React.Component {
         this.setState({ hw2Input: even.target.value })
     }
 
+    delay = ms => new Promise(
+        resolve => setTimeout(resolve, ms)
+    );
 
     async handleCheckIn(hwset, qty) {
         if (qty !== 0 && qty !== "") {
@@ -102,7 +107,13 @@ class HWSet extends React.Component {
                 else {
                     alert(setsCheckedIn + " hardware checked in from HWSet" + hwsetval)
                 }
-                // this.state.refreshProject();
+                // if (this.state.viewSingle !== this.state.name) {
+                //     this.state.refreshProject();
+                //     this.state.refreshProject();
+                //     this.state.updateDisp(true);
+                //     await this.delay(0);
+                //     this.state.updateDisp(false);
+                // }
             }
         }
     }
@@ -132,7 +143,13 @@ class HWSet extends React.Component {
                 else {
                     alert(setsCheckedOut + " hardware checked out from HWSet" + hwsetval)
                 }
-                // this.state.refreshProject();
+                // if (this.state.viewSingle !== this.state.name) {
+                //     this.state.refreshProject();
+                //     this.state.refreshProject();
+                //     this.state.updateDisp(true);
+                //     await this.delay(0);
+                //     this.state.updateDisp(false);
+                // }
             }
         }
     }

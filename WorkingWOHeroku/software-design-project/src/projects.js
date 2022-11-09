@@ -24,11 +24,14 @@ function Projects() {
 
     const [displayPopup, changePopupDisplay] = useState(false);
 
+    const [viewSingle, updateViewSingle] = useState("");
+
     function handleSelectProject(i) {
         state.data.map((j) => {
             return j.display = false;
         });
         i.display = true;
+        updateViewSingle(i.pid);
         changeDisplaySelect(false);
         forceUpdate();
     }
@@ -39,6 +42,7 @@ function Projects() {
         state.data.map((j) => {
             return j.display = true;
         });
+        updateViewSingle("");
         changeDisplaySelect(false);
         forceUpdate();
     }
@@ -196,15 +200,15 @@ function Projects() {
                 state.data.map((i) => {
                     return i.pid !== "DoNotDelete" && i.display === true ?
                         (i.pid === userProj.userPj ?
-                            <SingleProject refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Leave'} />
-                            : <SingleProject refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Join'} />)
+                            <SingleProject view={viewSingle} updateDisp={changeDisplaySelect} refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Leave'} />
+                            : <SingleProject view={viewSingle} updateDisp={changeDisplaySelect} refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Join'} />)
                         : null
                 }) : 
                 (!displaySelect && creatorProj ? state.data.map((i) => {
                     return i.pid !== "DoNotDelete" && i.display === true ?
                         (i.pid === userProj.userPj ?
-                            (i.creator === userID ? <SingleProject refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Leave'} /> : null)
-                            : (i.creator === userID ? <SingleProject refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Join'} /> : null))
+                            (i.creator === userID ? <SingleProject view={viewSingle} updateDisp={changeDisplaySelect} refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Leave'} /> : null)
+                            : (i.creator === userID ? <SingleProject view={viewSingle} updateDisp={changeDisplaySelect} refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Join'} /> : null))
                         : null
                 }) : null)}
             </div>
