@@ -56,6 +56,7 @@ function Projects() {
         console.log(userList);
         if (userList !== "" && !userList.includes(userID)) userList = userID+','+userList;
         var users = userList.split(',');
+        users = Array.from(new Set(users));
         if (projectID !== "" && userList !== "") {
             var requestOptions = {
                 method: 'POST',
