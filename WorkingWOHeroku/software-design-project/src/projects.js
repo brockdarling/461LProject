@@ -152,9 +152,13 @@ function Projects() {
                 <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getUsersAndProject(); getAllProjects(); changeDisplaySelect(!displaySelect); }}>
                     Select Project
                 </button>
+                <button className="create-proj-btn" style={displayCreate ? {display: 'none'} : {display : 'flex'}} onClick={() => {/* GOOD LUCK ARJUN!*/ changeDisplaySelect(false);}}>
+                    My Projects
+                </button>
                 <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { changeDisplayCreate(!displayCreate); changeDisplaySelect(false) }}>
                     Create Project
                 </button>
+                
                 <div className="create-proj-div-two" style={displayCreate ? { display: 'flex', marginTop: '10px' } : { display: 'none' }}>
                     <input id="projectID" className="proj-input" placeholder="Project Name"></input>
                     <input id="userList" className="proj-input" placeholder="Authorized Users"></input>
