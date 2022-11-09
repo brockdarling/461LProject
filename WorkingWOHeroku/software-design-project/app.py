@@ -196,7 +196,7 @@ def joinProject(projectid, userID):
         return "Joined "+projectid
         # projects.update_one({'projectID': projectid},{'$push': {'users' :  userID}})
     # return "Joined " + projectid
-    return "Can not join"+projectid
+    return "Cannot join "+projectid
 
 # This function queries the projectId from the URL and returns the project id to the
 # front end. The front end displays a pop-up message which says “Left <projectId>”
