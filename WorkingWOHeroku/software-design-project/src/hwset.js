@@ -102,7 +102,7 @@ class HWSet extends React.Component {
                 else {
                     alert(setsCheckedIn + " hardware checked in from HWSet" + hwsetval)
                 }
-                this.state.refreshProject();
+                // this.state.refreshProject();
             }
         }
     }
@@ -132,7 +132,7 @@ class HWSet extends React.Component {
                 else {
                     alert(setsCheckedOut + " hardware checked out from HWSet" + hwsetval)
                 }
-                this.state.refreshProject();
+                // this.state.refreshProject();
             }
         }
     }
