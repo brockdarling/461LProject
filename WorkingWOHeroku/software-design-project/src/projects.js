@@ -13,7 +13,7 @@ function Projects() {
     });
 
     const [userProj, setUserProj] = useState({
-        userPj: 'testagain'
+        userPj: ''
     });
 
     const [displayCreate, changeDisplayCreate] = useState(false);
@@ -26,7 +26,7 @@ function Projects() {
 
     function handleSelectProject(i) {
         state.data.map((j) => {
-            j.display = false;
+            return j.display = false;
         });
         i.display = true;
         changeDisplaySelect(false);
@@ -34,10 +34,10 @@ function Projects() {
     }
 
     function showAllProjects() {
-        getUsersAndProject();
+        getUsersProjects();
         getAllProjects();
         state.data.map((j) => {
-            j.display = true;
+            return j.display = true;
         });
         changeDisplaySelect(false);
         forceUpdate();
@@ -47,6 +47,8 @@ function Projects() {
         let [value, setState] = useState(true);
         return () => setState(!value);
     }
+
+    let forceUpdate = useForceUpdate();
 
     async function createProject() {
         var projectID = document.getElementById("projectID").value.replaceAll(' ', '');
@@ -64,7 +66,7 @@ function Projects() {
             const result = await response.text();
             alert(result);
         } else if (projectID !== "" && userList === "") {
-            var requestOptions = {
+            requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userList: "all" })
@@ -76,9 +78,7 @@ function Projects() {
         showAllProjects();
     }
 
-    let forceUpdate = useForceUpdate();
-
-    async function getUsersAndProject() {
+    async function getUsersProjects() {
         const response = await fetch('/getUsersProjects', { methods: 'GET' });
         const result = await response.json();
         var i = 0;
@@ -154,10 +154,10 @@ function Projects() {
     return (
         <div>
             <div className="create-proj-div">
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getUsersAndProject(); getAllProjects(); showCreatorProj(false); changeDisplaySelect(!displaySelect); }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getUsersProjects(); getAllProjects(); showCreatorProj(false); changeDisplaySelect(!displaySelect); }}>
                     Select Project
                 </button>
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { showCreatorProj(true); changeDisplaySelect(false); }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getAllProjects(); showCreatorProj(true); changeDisplaySelect(false); }}>
                     My Projects
                 </button>
                 <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { showCreatorProj(false); changeDisplayCreate(!displayCreate); changeDisplaySelect(false) }}>
