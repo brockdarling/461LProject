@@ -80,6 +80,8 @@ def checkIn_hardware(projectid, hwset, qty, userID):
 
     user = users.find_one({'uid': userID})
     pjs = user['projects']
+    if len(pjs) == 0:
+        return "Must join project in order to checkin hardware"
     thisPj = pjs[projectid]
     userPjQty1 = thisPj[0]
     userPjQty2 = thisPj[1]
@@ -144,6 +146,8 @@ def checkOut_hardware(projectid, hwset, qty, userID):
 
     user = users.find_one({'uid': userID})
     pjs = user['projects']
+    if len(pjs) == 0:
+        return "Must join project in order to checkout hardware"
     thisPj = pjs[projectid]
     userPjQty1 = thisPj[0]
     userPjQty2 = thisPj[1]
