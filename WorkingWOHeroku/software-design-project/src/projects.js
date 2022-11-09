@@ -20,6 +20,8 @@ function Projects() {
 
     const [displaySelect, changeDisplaySelect] = useState(true);
 
+    const [creatorProj, showCreatorProj] = useState(false);
+
     const [displayPopup, changePopupDisplay] = useState(false);
 
     function handleSelectProject(i) {
@@ -129,6 +131,7 @@ function Projects() {
         }
     }, [displaySelect])
 
+    // consolidate useEffects
     useEffect(() => {
         if (displaySelect) {
             fetch('/getUsersProjects', { methods: 'GET' })
@@ -139,7 +142,6 @@ function Projects() {
                     var i = 0;
                     for (i = 0; i < jsonData.length; i++) {
                         if (jsonData[i].uid === userID) {
-                            // console.log(jsonData[i].uid + ": " + userID + ": " + Object.keys(jsonData[i].projects)[0]);
                             setUserProj({
                                 userPj: (Object.keys(jsonData[i].projects)[0])
                             });
@@ -152,13 +154,13 @@ function Projects() {
     return (
         <div>
             <div className="create-proj-div">
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getUsersAndProject(); getAllProjects(); changeDisplaySelect(!displaySelect); }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getUsersAndProject(); getAllProjects(); showCreatorProj(false); changeDisplaySelect(!displaySelect); }}>
                     Select Project
                 </button>
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => {/* GOOD LUCK ARJUN!*/ changeDisplaySelect(false); }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { showCreatorProj(true); changeDisplaySelect(false); }}>
                     My Projects
                 </button>
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { changeDisplayCreate(!displayCreate); changeDisplaySelect(false) }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { showCreatorProj(false); changeDisplayCreate(!displayCreate); changeDisplaySelect(false) }}>
                     Create Project
                 </button>
 
@@ -189,13 +191,21 @@ function Projects() {
             </div>
 
             <div className="projcover">
-                {!displaySelect ? state.data.map((i) => {
+                {!displaySelect && !creatorProj ? 
+                state.data.map((i) => {
                     return i.pid !== "DoNotDelete" && i.display === true ?
                         (i.pid === userProj.userPj ?
                             <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Leave'} />
                             : <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Join'} />)
                         : null
-                }) : ""}
+                }) : 
+                (!displaySelect && creatorProj ? state.data.map((i) => {
+                    return i.pid !== "DoNotDelete" && i.display === true ?
+                        (i.pid === userProj.userPj ?
+                            (i.creator === userID ? <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Leave'} /> : null)
+                            : (i.creator === userID ? <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Join'} /> : null))
+                        : null
+                }) : null)}
             </div>
         </div>
     )
