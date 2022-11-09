@@ -83,6 +83,16 @@
   justify-content: center;
 }
 
+.create-proj-popup{
+  position: absolute;
+  margin-top: 10vh;
+  background-color: rgba(215, 225, 233);;
+  border-radius: 4px;
+  border: 2px solid  teal;
+  padding: 5px;
+  z-index: 2;
+}
+
 .proj-name-div {
   margin-right: 10px;
 }

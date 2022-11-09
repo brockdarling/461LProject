@@ -20,6 +20,8 @@ function Projects() {
 
     const [displaySelect, changeDisplaySelect] = useState(true);
 
+    const [displayPopup, changePopupDisplay] = useState(false);
+
     function handleSelectProject(i) {
         state.data.map((j) => {
             j.display = false;
@@ -47,24 +49,24 @@ function Projects() {
     async function createProject() {
         var projectID = document.getElementById("projectID").value.replaceAll(' ', '');
         var userList = document.getElementById("userList").value.replaceAll(' ', '');
-        if (userList !== "" && !userList.contains(userID)) userList = userID+','+userList;
+        if (userList !== "" && !userList.contains(userID)) userList = userID + ',' + userList;
         var users = userList.split(',');
-        if (projectID !== "" && userList !== ""){
+        if (projectID !== "" && userList !== "") {
             var requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({userList: users})
+                body: JSON.stringify({ userList: users })
             };
-            const response = await fetch('/createProject/'+projectID+'/'+userID, requestOptions);
-            const result = await response.text(); 
+            const response = await fetch('/createProject/' + projectID + '/' + userID, requestOptions);
+            const result = await response.text();
             alert(result);
         } else if (projectID !== "" && userList === "") {
             var requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({userList: "all"})
+                body: JSON.stringify({ userList: "all" })
             };
-            const response = await fetch('/createProject/'+projectID+'/'+userID, requestOptions); 
+            const response = await fetch('/createProject/' + projectID + '/' + userID, requestOptions);
             const result = await response.text();
             alert(result);
         }
@@ -79,7 +81,7 @@ function Projects() {
         var i = 0;
         for (i = 0; i < result.length; i++) {
             if (result[i].uid === userID) {
-                setUserProj({                
+                setUserProj({
                     userPj: (Object.keys(result[i].projects))
                 });
             }
@@ -106,23 +108,23 @@ function Projects() {
     useEffect(() => {
         if (displaySelect) {
             fetch('/allprojects', { methods: 'GET' })
-            .then(response => {
-                return response.json();
-            })
-            .then((jsonData) => {
-                setState({
-                    data: jsonData.map(item => ({
-                        pid: item.projectID,
-                        users: JSON.stringify(item.users).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll(',', ', '),
-                        hwset1num: item.HWSet[0],
-                        hwset1den: item.HWSet[2],
-                        hwset2num: item.HWSet[1],
-                        hwset2den: item.HWSet[3],
-                        creator: item.creator,
-                        display: true
-                    })),
+                .then(response => {
+                    return response.json();
                 })
-            });
+                .then((jsonData) => {
+                    setState({
+                        data: jsonData.map(item => ({
+                            pid: item.projectID,
+                            users: JSON.stringify(item.users).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll(',', ', '),
+                            hwset1num: item.HWSet[0],
+                            hwset1den: item.HWSet[2],
+                            hwset2num: item.HWSet[1],
+                            hwset2den: item.HWSet[3],
+                            creator: item.creator,
+                            display: true
+                        })),
+                    })
+                });
         }
     }, [displaySelect])
 
@@ -137,7 +139,7 @@ function Projects() {
                     for (i = 0; i < jsonData.length; i++) {
                         if (jsonData[i].uid === userID) {
                             // console.log(jsonData[i].uid + ": " + userID + ": " + Object.keys(jsonData[i].projects)[0]);
-                            setUserProj({                
+                            setUserProj({
                                 userPj: (Object.keys(jsonData[i].projects)[0])
                             });
                         }
@@ -152,17 +154,22 @@ function Projects() {
                 <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getUsersAndProject(); getAllProjects(); changeDisplaySelect(!displaySelect); }}>
                     Select Project
                 </button>
-                <button className="create-proj-btn" style={displayCreate ? {display: 'none'} : {display : 'flex'}} onClick={() => {/* GOOD LUCK ARJUN!*/ changeDisplaySelect(false);}}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => {/* GOOD LUCK ARJUN!*/ changeDisplaySelect(false); }}>
                     My Projects
                 </button>
                 <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { changeDisplayCreate(!displayCreate); changeDisplaySelect(false) }}>
                     Create Project
                 </button>
-                
+
                 <div className="create-proj-div-two" style={displayCreate ? { display: 'flex', marginTop: '10px' } : { display: 'none' }}>
-                    <input id="projectID" className="proj-input" placeholder="Project Name"></input>
-                    <input id="userList" className="proj-input" placeholder="Authorized Users"></input>
-                    <div>
+                    <div onMouseEnter={() => { changePopupDisplay(true); }} onMouseLeave={() => { changePopupDisplay(false); }}>
+                        <input id="projectID" className="proj-input" placeholder="Project Name"></input>
+                    </div>
+                    <div onMouseEnter={() => { changePopupDisplay(true); }} onMouseLeave={() => { changePopupDisplay(false); }}>
+                        <input id="userList" className="proj-input" placeholder="Authorized Users"></input>
+                    </div>
+
+                    <div className="create-proj-popup" style={displayPopup ? { display: 'block' } : { display: 'none' }}>
                         <p>No spaces in projectID and users list</p>
                         <p>Enter list of users separated by commas</p>
                     </div>
@@ -182,11 +189,11 @@ function Projects() {
 
             <div className="projcover">
                 {!displaySelect ? state.data.map((i) => {
-                    return i.pid !== "DoNotDelete" && i.display === true ? 
-                                (i.pid === userProj.userPj ?
-                                    <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Leave'} />
-                                    : <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Join'} />)
-                                : null
+                    return i.pid !== "DoNotDelete" && i.display === true ?
+                        (i.pid === userProj.userPj ?
+                            <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Leave'} />
+                            : <SingleProject name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Join'} />)
+                        : null
                 }) : ""}
             </div>
         </div>
