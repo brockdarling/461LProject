@@ -22,6 +22,7 @@ CORS(app)
 def serve():
     return send_from_directory(app.static_folder, 'index.html')
 
+
 client = MongoClient('mongodb+srv://gwills:jbG1kDkSwwyZVssJ@cluster0.kdtylku.mongodb.net/test?retryWrites=true&w=majority', tlsCAFile = ca)
 userDB = client['userInfo']
 users = userDB['random']
@@ -70,6 +71,8 @@ def checkIn_hardware(projectid, hwset, qty, userID):
 
     user = users.find_one({'uid': userID})
     pjs = user['projects']
+    if len(pjs) == 0:
+        return "Must join project in order to checkin hardware"
     thisPj = pjs[projectid]
     userPjQty1 = thisPj[0]
     userPjQty2 = thisPj[1]
@@ -134,6 +137,8 @@ def checkOut_hardware(projectid, hwset, qty, userID):
 
     user = users.find_one({'uid': userID})
     pjs = user['projects']
+    if len(pjs) == 0:
+        return "Must join project in order to checkout hardware"
     thisPj = pjs[projectid]
     userPjQty1 = thisPj[0]
     userPjQty2 = thisPj[1]

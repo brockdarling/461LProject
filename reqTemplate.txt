@@ -28,3 +28,16 @@ pytz==2022.6
 six==1.16.0
 SQLAlchemy==1.4.43
 Werkzeug==2.2.2
+
+
+from flask.helpers import send_from_directory
+
+import certifi
+ca = certifi.where()
+
+app = Flask(__name__, static_folder='461l-ltp/build', static_url_path='/')
+CORS(app)
+
+@app.route('/')
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
