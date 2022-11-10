@@ -283,10 +283,13 @@ def getProjectsUsersHaveJoined():
 def addUsersToProject(projectID, userID):
     request_data = request.get_json()
     # request data should be an object with a field called userList which is an array of strings
+    # accessed same way as in the createProject method
 
     # if the userid is the same as the project's creator, add all users to db
         # if there is a duplicate user, skip adding it
         # return "users added" or something
     # otherwise return userid+" does not have permission to add" or something
+
+    
 if __name__ == "__main__":
     app.run(debug=True)
