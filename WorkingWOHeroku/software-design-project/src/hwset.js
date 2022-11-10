@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import "./hwset.css"
 
 class HWSet extends React.Component {
@@ -15,7 +15,10 @@ class HWSet extends React.Component {
             HW2den: props.HW2den,
             joinButton: props.joinState,
             hw1Input: 0,
-            hw2Input: 0
+            hw2Input: 0,
+            refreshProject: props.refreshProject,
+            viewSingle: props.view,
+            updateDisp: props.updateDisp
         }
     }
     render() {
@@ -75,80 +78,80 @@ class HWSet extends React.Component {
         this.setState({ hw2Input: even.target.value })
     }
 
+    delay = ms => new Promise(
+        resolve => setTimeout(resolve, ms)
+    );
 
     async handleCheckIn(hwset, qty) {
-        await fetch('/checkIn/' + this.state.name + '/' + hwset + '/' + qty + '/' + this.state.userID)
-            .then((response) => {
-                if (response.ok) {
-                    try {
-                        return response.json();
-                    }
-                    catch (e) {
-                        console.log("Could not parse as text")
-                    }
+        if (qty !== 0 && qty !== "") {
+            const response = await fetch('/checkIn/' + this.state.name + '/' + hwset + '/' + qty + '/' + this.state.userID);
+            const resultText = await response.text();
+            if (resultText === "") {
+                alert("Some error occurred");
+            } else if (resultText === "Must join project in order to checkin hardware"){
+                alert(resultText);
+            } else {
+                const result = JSON.parse(resultText);
+                var hwsetval = result["hwset"]
+                var quantity = result["qty"]
+                var setsCheckedIn = result["setsCheckedIn"]
+                if (hwset === 1) {
+                    this.setState({ HW1num: quantity });
                 }
-            })
-            .then((data) => {
-                if (data == null) {
-                    alert("Some error occurred");
-                } else {
-                    // var projid = data["projectid"]
-                    var hwsetval = data["hwset"]
-                    var quantity = data["qty"]
-                    var setsCheckedIn = data["setsCheckedIn"]
-                    if (hwset == 1) {
-                        this.setState({ HW1num: quantity });
-                    }
-                    else {
-                        this.setState({ HW2num: quantity });
-                    }
-                    if (setsCheckedIn == 0) {
-                        alert("No Sets Checked In");
-                    }
-                    else {
-                        alert(setsCheckedIn + " hardware checked in from HWSet" + hwsetval)
-                    }
+                else {
+                    this.setState({ HW2num: quantity });
                 }
-            });
-
+                if (setsCheckedIn === 0) {
+                    alert("No Sets Checked In");
+                }
+                else {
+                    alert(setsCheckedIn + " hardware checked in from HWSet" + hwsetval)
+                }
+                // if (this.state.viewSingle !== this.state.name) {
+                //     this.state.refreshProject();
+                //     this.state.refreshProject();
+                //     this.state.updateDisp(true);
+                //     await this.delay(0);
+                //     this.state.updateDisp(false);
+                // }
+            }
+        }
     }
 
     async handleCheckOut(hwset, qty) {
-
-        await fetch('/checkOut/' + this.state.name + '/' + hwset + '/' + qty + '/' + this.state.userID)
-            .then((response) => {
-                if (response.ok) {
-                    try {
-                        return response.json();
-                    }
-                    catch (e) {
-                        console.log("Could not parse as text")
-                    }
+        if (qty !== 0 && qty !== "") {
+            const response = await fetch('/checkOut/' + this.state.name + '/' + hwset + '/' + qty + '/' + this.state.userID);
+            const resultText = await response.text();
+            if (resultText === "") {
+                alert("Some error occurred");
+            } else if (resultText === "Must join project in order to checkout hardware"){
+                alert(resultText);
+            } else {
+                const result = JSON.parse(resultText);
+                var hwsetval = result["hwset"]
+                var quantity = result["qty"]
+                var setsCheckedOut = result["setsCheckedOut"]
+                if (hwset === 1) {
+                    this.setState({ HW1num: quantity });
                 }
-            })
-            .then((data) => {
-                if (data == null) {
-                    alert("Some error occurred");
-                } else {
-                    // var projid = data["projectid"]
-                    var hwsetval = data["hwset"]
-                    var quantity = data["qty"]
-                    var setsCheckedOut = data["setsCheckedOut"]
-                    if (hwset == 1) {
-                        this.setState({ HW1num: quantity });
-                    }
-                    else {
-                        this.setState({ HW2num: quantity });
-                    }
-                    if (setsCheckedOut == 0) {
-                        alert("No Sets Checked Out");
-                    }
-                    else {
-                        alert(setsCheckedOut + " hardware checked out from HWSet" + hwsetval)
-                    }
+                else {
+                    this.setState({ HW2num: quantity });
                 }
-            });
-
+                if (setsCheckedOut === 0) {
+                    alert("No Sets Checked Out");
+                }
+                else {
+                    alert(setsCheckedOut + " hardware checked out from HWSet" + hwsetval)
+                }
+                // if (this.state.viewSingle !== this.state.name) {
+                //     this.state.refreshProject();
+                //     this.state.refreshProject();
+                //     this.state.updateDisp(true);
+                //     await this.delay(0);
+                //     this.state.updateDisp(false);
+                // }
+            }
+        }
     }
 
     async handleJoinLeave() {
