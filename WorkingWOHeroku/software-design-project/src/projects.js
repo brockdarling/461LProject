@@ -272,8 +272,8 @@ function Projects() {
 
 
                         <div className="create-proj-popup" style={displayPopup ? { display: 'block', textAlign: "center" } : { display: 'none' }}>
-                            <p>No spaces in projectID and users list</p>
-                            <p>Enter list of users separated by commas</p>
+                            <p>No spaces in Project Name and Authorized Users list</p>
+                            <p>Enter list of userIDs separated by commas</p>
                         </div>
                     </div>
 
@@ -318,8 +318,8 @@ function Projects() {
                         </div>
 
                         <div className="create-proj-popup" style={displayPopup ? { display: 'block', textAlign: "center" } : { display: 'none' }}>
-                            <p>No spaces in projectID and users list</p>
-                            <p>Enter list of users separated by commas</p>
+                            <p>No spaces in Project Name and Authorized Users list</p>
+                            <p>Enter list of userIDs separated by commas</p>
                         </div>
                     </div>
 
