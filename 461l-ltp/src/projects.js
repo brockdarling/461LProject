@@ -351,18 +351,22 @@ function Projects() {
                     Show All Projects
                 </button>
                 
-                {state.data.map((i) => {
-                    return i.pid !== "DoNotDelete" ? 
-                        <button className="select-proj-button"
-                            onClick={() => handleSelectProject(i)}
-                            onMouseEnter={() => { 
-                                changeShowProjDesc(true); 
-                                changeProjDescVal("Description: " + i.description)}}
-                            onMouseLeave={() => { changeShowProjDesc(false); }} >
-                                <SelectProj project={i} userID={userID} />
-                        </button> 
-                    : null
-                })}
+                <div className="proj-map">
+                    
+                    {state.data.map((i) => {
+                        return i.pid !== "DoNotDelete" ? 
+                            <button className="select-proj-button"
+                                onClick={() => handleSelectProject(i)}
+                                onMouseEnter={() => { 
+                                    changeShowProjDesc(true); 
+                                    changeProjDescVal("Description: " + i.description)}}
+                                onMouseLeave={() => { changeShowProjDesc(false); }} >
+                                    <SelectProj project={i} userID={userID} />
+                            </button> 
+                        : null
+                    })}
+                </div>
+
             </div>
 
             <div className="proj-desc-popup" style={showProjDesc ? { display: 'block' } : { display: 'none' }}>
