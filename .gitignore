@@ -4,8 +4,10 @@
 /node_modules
 /__pycache__/
 /.pnp
-# remove this
+/software-design-project/
 /461l-ltp/
+# remove this
+
 .pnp.js
 
 # testing
