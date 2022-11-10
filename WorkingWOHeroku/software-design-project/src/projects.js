@@ -3,8 +3,15 @@ import { useLocation } from 'react-router-dom';
 import "./projects.css"
 import SingleProject from "./singleProject";
 import SelectProj from "./selectProj";
+import { useNavigate } from "react-router-dom";
 
 function Projects() {
+    const navigate = useNavigate();
+
+    const navigateLogin = () => {
+        navigate('/');
+    };
+
     const location = useLocation();
     const userID = location.state.user;
 
@@ -204,6 +211,15 @@ function Projects() {
 
         <div>
             <div style={{ paddingTop: "20px", height: "18vh", alignItems: "top", justifyContent: "center", display: "flex", flexDirection: "column " }}>
+                <div className="logout-bar-div">
+                    <p className="userID-label">
+                        {userID}
+                    </p>
+                    <button className="logout-btn" onClick={navigateLogin}>
+                        Logout
+                    </button>
+                </div>
+
                 <div className="create-proj-div">
                     <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }}
                         onClick={() => {
