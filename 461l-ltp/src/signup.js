@@ -28,7 +28,7 @@ function Signup() {
     
     return (
         <div className="cover">
-            <h1>Signup</h1>
+            <h1>Sign Up</h1>
             <input style={{ marginTop: '10%' }} id="username" className="login-input" type="text" placeholder="username" />
             <input style={{ marginTop: '7%' }} id="uid" className="login-input" type="text" placeholder="user id" />
             <input style={{ marginTop: '7%' }} id="password" className="login-input" type="password" placeholder="password" />

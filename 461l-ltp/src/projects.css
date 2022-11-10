@@ -5,20 +5,20 @@
 }
 
 .projpage {
-  height: 100vh;
+  height: 100%;
   width: 100%;
   background-color: rgba(123, 169, 179, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
 .projcover {
-  padding-top: 20px;
   overflow-y: scroll;
   /* background-color: #e8ecf2; */
   width: 100vw;
-  height: 90vh;
+  height: 82vh;
   position: relative;
   border-radius: 0.3em;
   display: flex;
@@ -83,12 +83,12 @@
   justify-content: center;
 }
 
-.create-proj-popup{
+.create-proj-popup {
   position: absolute;
   margin-top: 10vh;
-  background-color: rgba(215, 225, 233);;
+  background-color: rgba(215, 225, 233);
   border-radius: 4px;
-  border: 2px solid  teal;
+  border: 2px solid teal;
   padding: 5px;
   z-index: 2;
 }
@@ -149,6 +149,7 @@
   margin-left: 10px;
   margin-right: 10px;
   background-color: transparent;
+  cursor: pointer;
 }
 
 .cancel-create-proj:hover {
@@ -170,3 +171,62 @@
   cursor: pointer;
   margin-bottom: 10px;
 }
+
+.addUsers-div {
+  height: 50px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.proj-desc-popup{
+  width: 50vw;
+  height: 5vh;
+  position: absolute;
+  margin-top: 0vh;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-left: 25vw;
+  background-color: rgba(215, 225, 233);
+  border-radius: 4px;
+  border: 2px solid teal;
+  padding: 5px;
+  z-index: 2;
+}
+
+.logout-bar-div {
+  height: 50px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-btn {
+  margin-right: 5%;
+  margin-left: 80%;
+  width: 60px;
+  height: 30px;
+  background-color: #e8ecf2;
+  border: 4px solid #e8ecf2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s;
+  border-radius: 9999px;
+  box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.2), 5px 5px 10px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.userID-label {
+  margin-left: 5%;
+  font-size: large;
+  color: teal;
+  justify-content: center;
+  align-items: center;
+}
+

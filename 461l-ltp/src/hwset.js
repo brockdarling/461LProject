@@ -18,7 +18,8 @@ class HWSet extends React.Component {
             hw2Input: 0,
             refreshProject: props.refreshProject,
             viewSingle: props.view,
-            updateDisp: props.updateDisp
+            updateDisp: props.updateDisp,
+            joinBool: props.joinBool
         }
     }
     render() {
@@ -62,7 +63,7 @@ class HWSet extends React.Component {
                     </div>
                 </div>
                 <div style={{ width: '10%' }}>
-                    <button className="leave-join-btn" onClick={() => {
+                    <button className="leave-join-btn" style={this.state.joinBool ? { borderColor: "teal" } : { borderColor: '#e8ecf2' }} onClick={() => {
                         this.handleJoinLeave()
                     }} variant="text">{this.state.joinButton}</button>
                 </div>
@@ -84,11 +85,11 @@ class HWSet extends React.Component {
 
     async handleCheckIn(hwset, qty) {
         if (qty !== 0 && qty !== "") {
-            const response = await fetch('/checkIn/' + this.state.name + '/' + hwset + '/' + qty + '/' + this.state.userID);
+            const response = await fetch('/checkIn/' + this.state.name + '/' + hwset + '/' + qty + '/' + this.state.userID, { methods: 'POST' });
             const resultText = await response.text();
             if (resultText === "") {
                 alert("Some error occurred");
-            } else if (resultText === "Must join project in order to checkin hardware"){
+            } else if (resultText === "Must join project in order to checkin hardware") {
                 alert(resultText);
             } else {
                 const result = JSON.parse(resultText);
@@ -107,6 +108,9 @@ class HWSet extends React.Component {
                 else {
                     alert(setsCheckedIn + " hardware checked in from HWSet" + hwsetval)
                 }
+
+                // this.state.refreshProject();
+
                 // if (this.state.viewSingle !== this.state.name) {
                 //     this.state.refreshProject();
                 //     this.state.refreshProject();
@@ -120,11 +124,11 @@ class HWSet extends React.Component {
 
     async handleCheckOut(hwset, qty) {
         if (qty !== 0 && qty !== "") {
-            const response = await fetch('/checkOut/' + this.state.name + '/' + hwset + '/' + qty + '/' + this.state.userID);
+            const response = await fetch('/checkOut/' + this.state.name + '/' + hwset + '/' + qty + '/' + this.state.userID, { methods: 'POST' });
             const resultText = await response.text();
             if (resultText === "") {
                 alert("Some error occurred");
-            } else if (resultText === "Must join project in order to checkout hardware"){
+            } else if (resultText === "Must join project in order to checkout hardware") {
                 alert(resultText);
             } else {
                 const result = JSON.parse(resultText);
@@ -143,6 +147,9 @@ class HWSet extends React.Component {
                 else {
                     alert(setsCheckedOut + " hardware checked out from HWSet" + hwsetval)
                 }
+
+                // this.state.refreshProject();
+
                 // if (this.state.viewSingle !== this.state.name) {
                 //     this.state.refreshProject();
                 //     this.state.refreshProject();
@@ -156,7 +163,7 @@ class HWSet extends React.Component {
 
     async handleJoinLeave() {
         if (this.state.joinButton === 'Join') {
-            const response = await fetch('/joinProject/' + this.state.name + '/' + this.state.userID);
+            const response = await fetch('/joinProject/' + this.state.name + '/' + this.state.userID, { methods: 'POST' });
             const result = await response.text();
             if (result === null) {
                 alert("Some error occurred");
@@ -165,9 +172,10 @@ class HWSet extends React.Component {
             } else {
                 alert(result);
                 this.setState({ joinButton: 'Leave' })
+                this.setState({ joinBool: true })
             }
         } else {
-            const response = await fetch('/leaveProject/' + this.state.name + '/' + this.state.userID);
+            const response = await fetch('/leaveProject/' + this.state.name + '/' + this.state.userID, { methods: 'POST' });
             const result = await response.text();
             if (result === null) {
                 alert("Some error occurred");
@@ -176,6 +184,7 @@ class HWSet extends React.Component {
             } else {
                 alert("Left " + result);
                 this.setState({ joinButton: 'Join' });
+                this.setState({ joinBool: false })
             }
         }
     }

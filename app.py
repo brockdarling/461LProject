@@ -10,17 +10,26 @@ from flask import request
 import os
 from pymongo import MongoClient
 from encryption import customEncrypt
-from flask.helpers import send_from_directory
 
 import certifi
 ca = certifi.where()
 
-app = Flask(__name__, static_folder='461l-ltp/build', static_url_path='/')
-CORS(app)
 
-@app.route('/')
-def serve():
-    return send_from_directory(app.static_folder, 'index.html')
+# app = Flask(__name__, static_folder='./build', static_url_path='/')
+
+
+
+app = Flask(__name__)
+
+# if __name__ == "__main__":
+#     app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))
+
+
+# Members API route
+# @app.route('/')
+# def index():
+#     return app.send_static_file('index.html')  
+# jbG1kDkSwwyZVssJ
 
 
 client = MongoClient('mongodb+srv://gwills:jbG1kDkSwwyZVssJ@cluster0.kdtylku.mongodb.net/test?retryWrites=true&w=majority', tlsCAFile = ca)
@@ -253,7 +262,8 @@ def createProject(projectid, userid):
         "projectID": projectid,
         "HWSet": [pj['HWSet'][0], pj['HWSet'][1], pj['HWSet'][2], pj['HWSet'][3]],
         "creator": userid,
-        "users": request_data['userList']
+        "users": request_data['userList'],
+        "description": request_data['description']
     }
     projects.insert_one(newProj)
 
@@ -269,9 +279,18 @@ def getProjectsUsersHaveJoined():
     return (usersProjects)
 
 
+# TODO: finish this method
+@app.route('/addUserToProject/<projectID>/<userID>', methods=['GET','POST'])
+def addUsersToProject(projectID, userID):
+    request_data = request.get_json()
+    # request data should be an object with a field called userList which is an array of strings
+    # accessed same way as in the createProject method
 
-# do we need an api to delete projects?
+    # if the userid is the same as the project's creator, add all users to db
+        # if there is a duplicate user, skip adding it
+        # return "users added" or something
+    # otherwise return userid+" does not have permission to add" or something
 
-
+    
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
