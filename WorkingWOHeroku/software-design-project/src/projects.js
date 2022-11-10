@@ -182,7 +182,7 @@ function Projects() {
     return (
         <div>
             <div className="create-proj-div">
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getUsersAndProject(); getAllProjects(); showCreatorProj(false); changeDisplaySelect(!displaySelect); changeDisplayAddUsersBtn(true) }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getUsersProjects(); getAllProjects(); showCreatorProj(false); changeDisplaySelect(!displaySelect); changeDisplayAddUsersBtn(true) }}>
                     Select Project
                 </button>
                 <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getAllProjects(); showCreatorProj(true); changeDisplaySelect(false); changeDisplayAddUsersBtn(false) }}>
