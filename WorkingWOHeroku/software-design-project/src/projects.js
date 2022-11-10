@@ -16,6 +16,10 @@ function Projects() {
         userPj: ''
     });
 
+    // const [userToProj, addUserToProj] = useState({
+    //     userToPj: 'testt'
+    // });
+
     const [displayCreate, changeDisplayCreate] = useState(false);
 
     const [displaySelect, changeDisplaySelect] = useState(true);
@@ -24,6 +28,10 @@ function Projects() {
 
     const [displayPopup, changePopupDisplay] = useState(false);
 
+    const [displayAddUsers, changeDisplayAddUsers] = useState(false);
+
+    const [displayAddUsersBtn, changeDisplayAddUsersBtn] = useState(true);
+    
     const [viewSingle, updateViewSingle] = useState("");
 
     function handleSelectProject(i) {
@@ -96,6 +104,21 @@ function Projects() {
         }
     }
 
+
+    // async function addUserToProject() { this neeeeeeds to be implemented with back end and called when "add user" is pressed
+    //     const response = await fetch('/getUsersOfProject', { methods: 'GET' }); getUsersOfProject needs to be implemented on backend
+    //     const result = await response.json();
+    //     var i = 0;
+    //     for (i = 0; i < result.length; i++) {
+    //         if (result[i].uid !== userID) {
+    //             addUserToProj({
+    //                 userToPj: (Object.keys(result[i].projects))
+    //             });
+    //         }
+    //     }
+    // }
+
+
     async function getAllProjects() {
         const response = await fetch('/allprojects', { methods: 'GET' })
         const result = await response.json();
@@ -159,15 +182,16 @@ function Projects() {
     return (
         <div>
             <div className="create-proj-div">
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getUsersProjects(); getAllProjects(); showCreatorProj(false); changeDisplaySelect(!displaySelect); }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getUsersAndProject(); getAllProjects(); showCreatorProj(false); changeDisplaySelect(!displaySelect); changeDisplayAddUsersBtn(true) }}>
                     Select Project
                 </button>
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getAllProjects(); showCreatorProj(true); changeDisplaySelect(false); }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getAllProjects(); showCreatorProj(true); changeDisplaySelect(false); changeDisplayAddUsersBtn(false) }}>
                     My Projects
                 </button>
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { showCreatorProj(false); changeDisplayCreate(!displayCreate); changeDisplaySelect(false) }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { showCreatorProj(false); changeDisplayCreate(!displayCreate); changeDisplaySelect(false); changeDisplayAddUsers(false); changeDisplayAddUsersBtn(true) }}>
                     Create Project
                 </button>
+
 
                 <div className="create-proj-div-two" style={displayCreate ? { display: 'flex', marginTop: '10px' } : { display: 'none' }}>
                     <div onMouseEnter={() => { changePopupDisplay(true); }} onMouseLeave={() => { changePopupDisplay(false); }}>
@@ -188,10 +212,34 @@ function Projects() {
                     <button className="cancel-create-proj" onClick={() => { changeDisplaySelect(false); changeDisplayCreate(false) }}>Cancel</button>
                 </div>
             </div>
+
+            <div className="addUsers-div">
+                
+                <button className="addUsers-proj-btn" style={displayAddUsersBtn ? { display: 'none' } : { display: 'flex' }} onClick={() => { changeDisplayAddUsersBtn(!displayAddUsersBtn); changeDisplayAddUsers(true); changeDisplayCreate(false) }}>
+                    Add User To Existing Project
+                </button>
+
+                <div className="addUsers-proj-div-two" style={displayAddUsers ? { display: 'flex', marginTop: '11px', marginRight: '-35px' } : { display: 'none' }}>
+                    <input id="projectID" className="proj-input" placeholder="Project Name"></input>
+                </div>
+
+                <div className="addUsers-proj-div-two" style={displayAddUsers ? { display: 'flex', marginTop: '10px', marginLeft: '20px' } : { display: 'none' }}>
+                    <input id="userList" className="proj-input" placeholder="Add Authorized User"></input>
+                </div>
+
+                <div className="addUsers-proj-btn" style={displayAddUsers ? { display: 'flex', marginTop: '4.3px' } : { display: 'none' }}>
+                    <button className="cancel-addUserTo-proj" onClick={() => { /*addUserToProj();*/ changeDisplaySelect(false); changeDisplayAddUsers(false); changeDisplayAddUsersBtn(false) }}>Add User</button>
+                    {/* Here, createProject should be changed to addUserToProj when it is set up */}
+                    <text>|</text>
+                    <button className="cancel-addUserTo-proj" onClick={() => { changeDisplaySelect(false); changeDisplayAddUsers(false); changeDisplayAddUsersBtn(false) }}>Cancel</button>
+                </div>
+            </div>
+
             <div className="select-project" style={displaySelect ? { display: 'flex', padding: "10px" } : { display: 'none' }}>
                 {state.data.map((i) => {
                     return i.pid !== "DoNotDelete" ? <button className="select-proj-button" onClick={() => handleSelectProject(i)}><SelectProj name={i.pid} userID={userID} users={i.users} /></button> : null
                 })}
+                
                 <button className="create-proj-btn" style={{ marginTop: "20px" }} onClick={() => showAllProjects()}>Show All Projects</button>
             </div>
 
