@@ -34,34 +34,6 @@ function Projects() {
     
     const [viewSingle, updateViewSingle] = useState("");
 
-    function handleSelectProject(i) {
-        state.data.map((j) => {
-            return j.display = false;
-        });
-        i.display = true;
-        updateViewSingle(i.pid);
-        changeDisplaySelect(false);
-        forceUpdate();
-    }
-
-    function showAllProjects() {
-        getUsersProjects();
-        getAllProjects();
-        state.data.map((j) => {
-            return j.display = true;
-        });
-        updateViewSingle("");
-        changeDisplaySelect(false);
-        forceUpdate();
-    }
-
-    function useForceUpdate() {
-        let [value, setState] = useState(true);
-        return () => setState(!value);
-    }
-
-    let forceUpdate = useForceUpdate();
-
     async function createProject() {
         var projectID = document.getElementById("projectID").value.replaceAll(' ', '');
         var userList = document.getElementById("userList").value.replaceAll(' ', '');
@@ -104,20 +76,25 @@ function Projects() {
         }
     }
 
-
-    // async function addUserToProject() { this neeeeeeds to be implemented with back end and called when "add user" is pressed
-    //     const response = await fetch('/getUsersOfProject', { methods: 'GET' }); getUsersOfProject needs to be implemented on backend
-    //     const result = await response.json();
-    //     var i = 0;
-    //     for (i = 0; i < result.length; i++) {
-    //         if (result[i].uid !== userID) {
-    //             addUserToProj({
-    //                 userToPj: (Object.keys(result[i].projects))
-    //             });
-    //         }
-    //     }
-    // }
-
+    async function addUserToProject() {
+        var projectID = document.getElementById("projectToAddUsers").value.replaceAll(' ', '');
+        var userList = document.getElementById("addUsers").value.replaceAll(' ', '');
+        
+        if (projectID !== "" && userList !== "") {
+            var users = userList.split(',');
+            var requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userList: users })
+            };
+            const response = await fetch('/addUserToProject/' + projectID + '/' + userID, requestOptions);
+            const result = await response.text();
+            alert(result);
+        } else {
+            alert("Neither fields can be empty");
+        }
+        showAllProjects();
+    }
 
     async function getAllProjects() {
         const response = await fetch('/allprojects', { methods: 'GET' })
@@ -125,7 +102,11 @@ function Projects() {
         setState({
             data: result.map(item => ({
                 pid: item.projectID,
-                users: JSON.stringify(item.users).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll(',', ', '),
+                users: JSON.stringify(item.users)
+                            .replaceAll('[', '')
+                            .replaceAll(']', '')
+                            .replaceAll('"', '')
+                            .replaceAll(',', ', '),
                 hwset1num: item.HWSet[0],
                 hwset1den: item.HWSet[2],
                 hwset2num: item.HWSet[1],
@@ -134,6 +115,34 @@ function Projects() {
                 display: true
             }))
         });
+    }
+
+    function useForceUpdate() {
+        let [value, setState] = useState(true);
+        return () => setState(!value);
+    }
+
+    let forceUpdate = useForceUpdate();
+
+    function handleSelectProject(i) {
+        state.data.map((j) => {
+            return j.display = false;
+        });
+        i.display = true;
+        updateViewSingle(i.pid);
+        changeDisplaySelect(false);
+        forceUpdate();
+    }
+
+    function showAllProjects() {
+        getUsersProjects();
+        getAllProjects();
+        state.data.map((j) => {
+            return j.display = true;
+        });
+        updateViewSingle("");
+        changeDisplaySelect(false);
+        forceUpdate();
     }
 
     useEffect(() => {
@@ -146,20 +155,23 @@ function Projects() {
                     setState({
                         data: jsonData.map(item => ({
                             pid: item.projectID,
-                            users: JSON.stringify(item.users).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll(',', ', '),
+                            users: JSON.stringify(item.users)
+                                        .replaceAll('[', '')
+                                        .replaceAll(']', '')
+                                        .replaceAll('"', '')
+                                        .replaceAll(',', ', '),
                             hwset1num: item.HWSet[0],
                             hwset1den: item.HWSet[2],
                             hwset2num: item.HWSet[1],
                             hwset2den: item.HWSet[3],
                             creator: item.creator,
-                            display: true
+                            // display: true
                         })),
                     })
                 });
         }
     }, [displaySelect])
 
-    // consolidate useEffects
     useEffect(() => {
         if (displaySelect) {
             fetch('/getUsersProjects', { methods: 'GET' })
@@ -182,13 +194,30 @@ function Projects() {
     return (
         <div>
             <div className="create-proj-div">
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getUsersProjects(); getAllProjects(); showCreatorProj(false); changeDisplaySelect(!displaySelect); changeDisplayAddUsersBtn(true) }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} 
+                    onClick={() => { 
+                        getUsersProjects(); 
+                        getAllProjects(); 
+                        showCreatorProj(false); 
+                        changeDisplaySelect(!displaySelect); 
+                        changeDisplayAddUsersBtn(true) }}>
                     Select Project
                 </button>
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { getAllProjects(); showCreatorProj(true); changeDisplaySelect(false); changeDisplayAddUsersBtn(false) }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} 
+                    onClick={() => { 
+                        getAllProjects(); 
+                        showCreatorProj(true); 
+                        changeDisplaySelect(false); 
+                        changeDisplayAddUsersBtn(false) }}>
                     My Projects
                 </button>
-                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} onClick={() => { showCreatorProj(false); changeDisplayCreate(!displayCreate); changeDisplaySelect(false); changeDisplayAddUsers(false); changeDisplayAddUsersBtn(true) }}>
+                <button className="create-proj-btn" style={displayCreate ? { display: 'none' } : { display: 'flex' }} 
+                    onClick={() => { 
+                        showCreatorProj(false); 
+                        changeDisplayCreate(!displayCreate); 
+                        changeDisplaySelect(false); 
+                        changeDisplayAddUsers(false); 
+                        changeDisplayAddUsersBtn(true) }}>
                     Create Project
                 </button>
 
@@ -206,59 +235,131 @@ function Projects() {
                         <p>Enter list of users separated by commas</p>
                     </div>
                 </div>
+
+
                 <div className="create-proj-btn" style={displayCreate ? { display: 'flex' } : { display: 'none' }}>
-                    <button className="cancel-create-proj" onClick={() => { createProject(); changeDisplaySelect(false); changeDisplayCreate(false) }}>Create</button>
+                    <button className="cancel-create-proj" 
+                        onClick={() => { 
+                            createProject(); 
+                            changeDisplaySelect(false); 
+                            changeDisplayCreate(false); }}>
+                        Create
+                    </button>
                     |
-                    <button className="cancel-create-proj" onClick={() => { changeDisplaySelect(false); changeDisplayCreate(false) }}>Cancel</button>
+                    <button className="cancel-create-proj" 
+                        onClick={() => { 
+                            changeDisplaySelect(false); 
+                            changeDisplayCreate(false); }}>
+                        Cancel
+                    </button>
                 </div>
             </div>
 
+
             <div className="addUsers-div">
-                
-                <button className="addUsers-proj-btn" style={displayAddUsersBtn ? { display: 'none' } : { display: 'flex' }} onClick={() => { changeDisplayAddUsersBtn(!displayAddUsersBtn); changeDisplayAddUsers(true); changeDisplayCreate(false) }}>
+                <button className="addUsers-proj-btn" style={displayAddUsersBtn ? { display: 'none' } : { display: 'flex' }} 
+                    onClick={() => { 
+                        changeDisplayAddUsersBtn(!displayAddUsersBtn); 
+                        changeDisplayAddUsers(true); 
+                        changeDisplayCreate(false); }}>
                     Add User To Existing Project
                 </button>
 
+
                 <div className="addUsers-proj-div-two" style={displayAddUsers ? { display: 'flex', marginTop: '11px', marginRight: '-35px' } : { display: 'none' }}>
-                    <input id="projectID" className="proj-input" placeholder="Project Name"></input>
+                    <input id="projectToAddUsers" className="proj-input" placeholder="Project Name" />
                 </div>
+
 
                 <div className="addUsers-proj-div-two" style={displayAddUsers ? { display: 'flex', marginTop: '10px', marginLeft: '20px' } : { display: 'none' }}>
-                    <input id="userList" className="proj-input" placeholder="Add Authorized User"></input>
+                    <input id="addUsers" className="proj-input" placeholder="Add Authorized User" />
                 </div>
 
+
                 <div className="addUsers-proj-btn" style={displayAddUsers ? { display: 'flex', marginTop: '4.3px' } : { display: 'none' }}>
-                    <button className="cancel-addUserTo-proj" onClick={() => { /*addUserToProj();*/ changeDisplaySelect(false); changeDisplayAddUsers(false); changeDisplayAddUsersBtn(false) }}>Add User</button>
-                    {/* Here, createProject should be changed to addUserToProj when it is set up */}
-                    <text>|</text>
-                    <button className="cancel-addUserTo-proj" onClick={() => { changeDisplaySelect(false); changeDisplayAddUsers(false); changeDisplayAddUsersBtn(false) }}>Cancel</button>
+                    <button className="cancel-addUserTo-proj" 
+                        onClick={() => { 
+                            /*addUserToProject();*/ 
+                            changeDisplaySelect(false); 
+                            changeDisplayAddUsers(false); 
+                            changeDisplayAddUsersBtn(false); }}>
+                        Add User
+                    </button>
+                    |
+                    <button className="cancel-addUserTo-proj" 
+                        onClick={() => { 
+                            changeDisplaySelect(false); 
+                            changeDisplayAddUsers(false); 
+                            changeDisplayAddUsersBtn(false); }}>
+                        Cancel
+                    </button>
                 </div>
             </div>
+
 
             <div className="select-project" style={displaySelect ? { display: 'flex', padding: "10px" } : { display: 'none' }}>
                 {state.data.map((i) => {
                     return i.pid !== "DoNotDelete" ? <button className="select-proj-button" onClick={() => handleSelectProject(i)}><SelectProj name={i.pid} userID={userID} users={i.users} /></button> : null
                 })}
                 
-                <button className="create-proj-btn" style={{ marginTop: "20px" }} onClick={() => showAllProjects()}>Show All Projects</button>
+
+                <button className="create-proj-btn" style={{ marginTop: "20px" }} onClick={() => showAllProjects()}>
+                    Show All Projects
+                </button>
             </div>
+
 
             <div className="projcover">
                 {!displaySelect && !creatorProj ? 
-                state.data.map((i) => {
-                    return i.pid !== "DoNotDelete" && i.display === true ?
-                        (i.pid === userProj.userPj ?
-                            <SingleProject view={viewSingle} updateDisp={changeDisplaySelect} refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Leave'} />
-                            : <SingleProject view={viewSingle} updateDisp={changeDisplaySelect} refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Join'} />)
+                    state.data.map((i) => {
+                        return i.pid !== "DoNotDelete" && i.display === true ?
+                            (i.pid === userProj.userPj ?
+                                <SingleProject 
+                                    project={i}
+                                    view={viewSingle} 
+                                    updateDisp={changeDisplaySelect} 
+                                    refreshProject={getAllProjects}  
+                                    userID={userID} 
+                                    joinState={'Leave'} />
+                                : 
+                                <SingleProject 
+                                    project={i}
+                                    view={viewSingle} 
+                                    updateDisp={changeDisplaySelect} 
+                                    refreshProject={getAllProjects} 
+                                    userID={userID} 
+                                    joinState={'Join'} />
+                            )
                         : null
-                }) : 
-                (!displaySelect && creatorProj ? state.data.map((i) => {
-                    return i.pid !== "DoNotDelete" && i.display === true ?
-                        (i.pid === userProj.userPj ?
-                            (i.creator === userID ? <SingleProject view={viewSingle} updateDisp={changeDisplaySelect} refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Leave'} /> : null)
-                            : (i.creator === userID ? <SingleProject view={viewSingle} updateDisp={changeDisplaySelect} refreshProject={getAllProjects} name={i.pid} userID={userID} users={i.users} HW1num={i.hwset1num} HW1den={i.hwset1den} HW2num={i.hwset2num} HW2den={i.hwset2den} joinState={'Join'} /> : null))
-                        : null
-                }) : null)}
+                    }) 
+                : 
+                (!displaySelect && creatorProj ? 
+                    state.data.map((i) => {
+                        return i.pid !== "DoNotDelete" && i.display === true ?
+                            (i.pid === userProj.userPj ?
+                                (i.creator === userID ? 
+                                    <SingleProject 
+                                        project={i}
+                                        view={viewSingle} 
+                                        updateDisp={changeDisplaySelect} 
+                                        refreshProject={getAllProjects}
+                                        userID={userID}
+                                        joinState={'Leave'} /> 
+                                : null)
+                            : 
+                                (i.creator === userID ? 
+                                    <SingleProject 
+                                        project={i}
+                                        view={viewSingle} 
+                                        updateDisp={changeDisplaySelect} 
+                                        refreshProject={getAllProjects} 
+                                        userID={userID} 
+                                        joinState={'Join'} /> 
+                                : null)
+                            )
+                            : null
+                    }) : null
+                )}
             </div>
         </div>
     )
