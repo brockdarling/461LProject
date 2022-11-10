@@ -106,12 +106,12 @@ function Projects() {
             const result = await response.text();
             alert(result);
             if (result === "Users added") {
-                showAllProjects(); 
+                showAllProjects();
             }
         } else {
             alert("Neither fields can be empty");
         }
-        
+
     }
 
     async function getAllProjects() {
@@ -266,7 +266,7 @@ function Projects() {
                                     <input id="userList" className="proj-input" placeholder="Authorized Users"></input>
                                 </div>
                             </div>
-            
+
                             <input id="projectDescription" className="proj-input" placeholder="Project Description" style={{ width: "420px" }}></input>
                         </div>
 
@@ -350,22 +350,21 @@ function Projects() {
                 <button className="create-proj-btn" style={{ marginBottom: "20px" }} onClick={() => showAllProjects()}>
                     Show All Projects
                 </button>
-                
-                <div className="proj-map">
-                    
-                    {state.data.map((i) => {
-                        return i.pid !== "DoNotDelete" ? 
-                            <button className="select-proj-button"
-                                onClick={() => handleSelectProject(i)}
-                                onMouseEnter={() => { 
-                                    changeShowProjDesc(true); 
-                                    changeProjDescVal("Description: " + i.description)}}
-                                onMouseLeave={() => { changeShowProjDesc(false); }} >
-                                    <SelectProj project={i} userID={userID} />
-                            </button> 
+
+
+                {state.data.map((i) => {
+                    return i.pid !== "DoNotDelete" ?
+                        <button className="select-proj-button"
+                            onClick={() => handleSelectProject(i)}
+                            onMouseEnter={() => {
+                                changeShowProjDesc(true);
+                                changeProjDescVal("Description: " + i.description)
+                            }}
+                            onMouseLeave={() => { changeShowProjDesc(false); }} >
+                            <SelectProj project={i} userID={userID} />
+                        </button>
                         : null
-                    })}
-                </div>
+                })}
 
             </div>
 
