@@ -290,8 +290,12 @@ def addUsersToProject(projectID, userID):
         # if there is a duplicate user, skip adding it
         # return "users added" or something
     # otherwise return userid+" does not have permission to add" or something
+    if projectID == "DoNotDelete":
+        return "Invalid Project ID"
     proj = projects.find_one({'projectID': projectID})
-    if userID == proj['creator']:
+    if not proj:
+            return projectID + " does not exist"
+    if userID is proj['creator']:
         for i in request_data['userList']:
             if not (i in proj['users']):
                 projects.update_one({'projectID': projectID},{'$push': {'users' :  i}})

@@ -97,10 +97,13 @@ function Projects() {
             const response = await fetch('/addUserToProject/' + projectID + '/' + userID, requestOptions);
             const result = await response.text();
             alert(result);
+            if (result === "Users added") {
+                showAllProjects(); 
+            }
         } else {
             alert("Neither fields can be empty");
         }
-        showAllProjects();
+        
     }
 
     async function getAllProjects() {
@@ -307,7 +310,6 @@ function Projects() {
                         <button className="cancel-create-proj"
                             onClick={() => {
                                 addUserToProject();
-                                showCreatorProj(false);
                                 changeDisplaySelect(false);
                                 changeDisplayAddUsers(false);
                                 changeDisplayAddUsersBtn(false);
