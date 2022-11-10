@@ -236,7 +236,7 @@ function Projects() {
                             getAllProjects();
                             showCreatorProj(true);
                             changeDisplaySelect(false);
-                            changeDisplayAddUsersBtn(false)
+                            changeDisplayAddUsersBtn(false);
                         }}>
                         My Projects
                     </button>
@@ -246,7 +246,7 @@ function Projects() {
                             changeDisplayCreate(!displayCreate);
                             changeDisplaySelect(false);
                             changeDisplayAddUsers(false);
-                            changeDisplayAddUsersBtn(true)
+                            changeDisplayAddUsersBtn(true);
                         }}>
                         Create Project
                     </button>
@@ -322,7 +322,8 @@ function Projects() {
                     <div className="create-proj-btn" style={displayAddUsers ? { display: 'flex' } : { display: 'none' }}>
                         <button className="cancel-create-proj"
                             onClick={() => {
-                                /*addUserToProject();*/
+                                addUserToProject();
+                                showCreatorProj(false);
                                 changeDisplaySelect(false);
                                 changeDisplayAddUsers(false);
                                 changeDisplayAddUsersBtn(false);
@@ -342,16 +343,18 @@ function Projects() {
                 </div>
             </div>
 
-{/* LOOK HERE ARJUN */}
             <div className="select-project" style={displaySelect ? { display: 'flex', padding: "10px" } : { display: 'none' }}>
                 {state.data.map((i) => {
-                    return i.pid !== "DoNotDelete" ? <button className="select-proj-button"
-                        onClick={() => handleSelectProject(i)}
-                        // CHANGE THESE VALS ONCE DESCRIPTION IMPLEMENTED
-                        onMouseEnter={() => { changeShowProjDesc(true); changeProjDescVal("Description: " + i.description)}}
-                        onMouseLeave={() => { changeShowProjDesc(false); }}
-                    ><SelectProj name={i.pid} userID={userID} users={i.users}
-                        /></button> : null
+                    return i.pid !== "DoNotDelete" ? 
+                        <button className="select-proj-button"
+                            onClick={() => handleSelectProject(i)}
+                            onMouseEnter={() => { 
+                                changeShowProjDesc(true); 
+                                changeProjDescVal("Description: " + i.description)}}
+                            onMouseLeave={() => { changeShowProjDesc(false); }} >
+                                <SelectProj project={i} userID={userID} />
+                        </button> 
+                    : null
                 })}
 
                 <button className="create-proj-btn" style={{ marginTop: "20px" }} onClick={() => showAllProjects()}>
