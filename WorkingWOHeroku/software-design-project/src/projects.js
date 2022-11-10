@@ -411,7 +411,8 @@ function Projects() {
                                             updateDisp={changeDisplaySelect}
                                             refreshProject={getAllProjects}
                                             userID={userID}
-                                            joinState={'Leave'} />
+                                            joinState={'Leave'}
+                                            joinBool={true} />
                                         : null)
                                     :
                                     (i.creator === userID ?
@@ -421,7 +422,8 @@ function Projects() {
                                             updateDisp={changeDisplaySelect}
                                             refreshProject={getAllProjects}
                                             userID={userID}
-                                            joinState={'Join'} />
+                                            joinState={'Join'}
+                                            joinBool={false} />
                                         : null)
                                 )
                                 : null
