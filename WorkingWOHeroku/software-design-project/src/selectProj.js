@@ -5,9 +5,9 @@ class SelectProj extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: props.name,
+            name: props.project.pid,
             userID: props.userID,
-            users: props.users,
+            users: props.project.users,
         };
     }
 
