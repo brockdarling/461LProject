@@ -129,6 +129,7 @@
 
 .proj-map{
   overflow-y: scroll;
+  overflow: hidden;
 }
 
 
