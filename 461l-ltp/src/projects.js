@@ -347,7 +347,7 @@ function Projects() {
             </div>
 
             <div className="select-project" style={displaySelect ? { display: 'flex', padding: "10px" } : { display: 'none' }}>
-                <button className="create-proj-btn" style={{ marginTop: "20px" }} onClick={() => showAllProjects()}>
+                <button className="create-proj-btn" style={{ marginBottom: "20px" }} onClick={() => showAllProjects()}>
                     Show All Projects
                 </button>
                 
