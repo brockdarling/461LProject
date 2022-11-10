@@ -16,7 +16,8 @@ class SingleProject extends React.Component {
             updateDisp: props.updateDisp,
             refreshProject: props.refreshProject,
             userID: props.userID,
-            joinState: props.joinState
+            joinState: props.joinState,
+            joinBool: props.joinBool
         };
     }
     render() {
@@ -41,7 +42,8 @@ class SingleProject extends React.Component {
                     updateDisp={this.state.updateDisp} 
                     refreshProject={this.state.refreshProject} 
                     userID={this.state.userID} 
-                    joinState={this.state.joinState} />
+                    joinState={this.state.joinState}
+                    joinBool = {this.state.joinBool} />
             </div>
         )
     }

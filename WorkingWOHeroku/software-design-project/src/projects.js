@@ -237,11 +237,13 @@ function Projects() {
                                     <input id="userList" className="proj-input" placeholder="Authorized Users"></input>
                                 </div>
                             </div>
-                            <input id="projectID" className="proj-input" placeholder="Project Description" style={{ width: "420px" }}></input>
+{/* LOOK HERE ARJUN */}
+                            {/* Grab Project Description from below input */}
+                            <input id="projectDescrip" className="proj-input" placeholder="Project Description" style={{ width: "420px" }}></input>
                         </div>
 
 
-                        <div className="create-proj-popup" style={displayPopup ? { display: 'block' } : { display: 'none' }}>
+                        <div className="create-proj-popup" style={displayPopup ? { display: 'block', textAlign: "center" } : { display: 'none' }}>
                             <p>No spaces in projectID and users list</p>
                             <p>Enter list of users separated by commas</p>
                         </div>
@@ -289,7 +291,7 @@ function Projects() {
                             <input id="addUsers" className="proj-input" placeholder="Authorized Users"></input>
                         </div>
 
-                        <div className="create-proj-popup" style={displayPopup ? { display: 'block' } : { display: 'none' }}>
+                        <div className="create-proj-popup" style={displayPopup ? { display: 'block', textAlign: "center" } : { display: 'none' }}>
                             <p>No spaces in projectID and users list</p>
                             <p>Enter list of users separated by commas</p>
                         </div>
@@ -327,7 +329,6 @@ function Projects() {
                         onMouseEnter={() => { changeShowProjDesc(true); changeProjDescVal("Name: " + i.pid + ", Users: " + i.users)}}
                         onMouseLeave={() => { changeShowProjDesc(false); }}
                     ><SelectProj name={i.pid} userID={userID} users={i.users}
-
                         /></button> : null
                 })}
 
@@ -356,7 +357,8 @@ function Projects() {
                                     updateDisp={changeDisplaySelect}
                                     refreshProject={getAllProjects}
                                     userID={userID}
-                                    joinState={'Leave'} />
+                                    joinState={'Leave'}
+                                    joinBool={true} />
                                 :
                                 <SingleProject
                                     project={i}
@@ -364,7 +366,8 @@ function Projects() {
                                     updateDisp={changeDisplaySelect}
                                     refreshProject={getAllProjects}
                                     userID={userID}
-                                    joinState={'Join'} />
+                                    joinState={'Join'}
+                                    joinBool={false} />
                             )
                             : null
                     })
