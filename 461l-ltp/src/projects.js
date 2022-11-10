@@ -13,7 +13,8 @@ function Projects() {
     };
 
     const location = useLocation();
-    const userID = location.state.user;
+    const userID = location.state.userid;
+    const username = location.state.username;
 
     const [state, setState] = useState({
         data: []
@@ -104,10 +105,13 @@ function Projects() {
             const response = await fetch('/addUserToProject/' + projectID + '/' + userID, requestOptions);
             const result = await response.text();
             alert(result);
+            if (result === "Users added") {
+                showAllProjects(); 
+            }
         } else {
             alert("Neither fields can be empty");
         }
-        showAllProjects();
+        
     }
 
     async function getAllProjects() {
@@ -213,7 +217,7 @@ function Projects() {
             <div style={{ paddingTop: "20px", height: "18vh", alignItems: "top", justifyContent: "center", display: "flex", flexDirection: "column " }}>
                 <div className="logout-bar-div">
                     <p className="userID-label">
-                        {userID}
+                        {username}
                     </p>
                     <button className="logout-btn" onClick={navigateLogin}>
                         Logout
@@ -323,7 +327,6 @@ function Projects() {
                         <button className="cancel-create-proj"
                             onClick={() => {
                                 addUserToProject();
-                                showCreatorProj(false);
                                 changeDisplaySelect(false);
                                 changeDisplayAddUsers(false);
                                 changeDisplayAddUsersBtn(false);
@@ -344,6 +347,10 @@ function Projects() {
             </div>
 
             <div className="select-project" style={displaySelect ? { display: 'flex', padding: "10px" } : { display: 'none' }}>
+                <button className="create-proj-btn" style={{ marginTop: "20px" }} onClick={() => showAllProjects()}>
+                    Show All Projects
+                </button>
+                
                 {state.data.map((i) => {
                     return i.pid !== "DoNotDelete" ? 
                         <button className="select-proj-button"
@@ -356,10 +363,6 @@ function Projects() {
                         </button> 
                     : null
                 })}
-
-                <button className="create-proj-btn" style={{ marginTop: "20px" }} onClick={() => showAllProjects()}>
-                    Show All Projects
-                </button>
             </div>
 
             <div className="proj-desc-popup" style={showProjDesc ? { display: 'block' } : { display: 'none' }}>
