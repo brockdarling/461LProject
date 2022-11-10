@@ -13,7 +13,8 @@ function Projects() {
     };
 
     const location = useLocation();
-    const userID = location.state.user;
+    const userID = location.state.userid;
+    const username = location.state.username;
 
     const [state, setState] = useState({
         data: []
@@ -216,7 +217,7 @@ function Projects() {
             <div style={{ paddingTop: "20px", height: "18vh", alignItems: "top", justifyContent: "center", display: "flex", flexDirection: "column " }}>
                 <div className="logout-bar-div">
                     <p className="userID-label">
-                        {userID}
+                        {username}
                     </p>
                     <button className="logout-btn" onClick={navigateLogin}>
                         Logout

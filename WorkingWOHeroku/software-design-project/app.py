@@ -63,7 +63,7 @@ def confirm(uid, password):
     # print(decryptedPassword)
     if decryptedPassword != password:
         return password + ' is not the correct password'
-    return uid + " is a user for the website"
+    return signIn['username']
 
     
 # This function queries the projectId and quantity from the URL and returns the

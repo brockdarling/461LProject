@@ -15,7 +15,7 @@ function Signup() {
             if (result === null || result === username+" is already a user") {
                 alert("This username or userid already exists");
             } else {
-                navigate('/Projects', {state: {user: uid}});
+                navigate('/Projects', {state: {userid: uid, username: username}});
             }
         } else {
             alert("Username, UserID, and Password cannot be empty");
@@ -30,7 +30,7 @@ function Signup() {
         <div className="cover">
             <h1>Sign Up</h1>
             <input style={{ marginTop: '10%' }} id="username" className="login-input" type="text" placeholder="username" />
-            <input style={{ marginTop: '7%' }} id="uid" className="login-input" type="text" placeholder="user id" />
+            <input style={{ marginTop: '7%' }} id="uid" className="login-input" type="text" placeholder="userID" />
             <input style={{ marginTop: '7%' }} id="password" className="login-input" type="password" placeholder="password" />
 
             <div style={{ marginTop: '13%' }} className="login-btn" onClick={addNewUserToDB}>Sign Up</div>
