@@ -262,7 +262,8 @@ def createProject(projectid, userid):
         "projectID": projectid,
         "HWSet": [pj['HWSet'][0], pj['HWSet'][1], pj['HWSet'][2], pj['HWSet'][3]],
         "creator": userid,
-        "users": request_data['userList']
+        "users": request_data['userList'],
+        "description": request_data['description']
     }
     projects.insert_one(newProj)
 

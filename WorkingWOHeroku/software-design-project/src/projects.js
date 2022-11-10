@@ -37,28 +37,35 @@ function Projects() {
     async function createProject() {
         var projectID = document.getElementById("projectID").value.replaceAll(' ', '');
         var userList = document.getElementById("userList").value.replaceAll(' ', '');
+        var description = document.getElementById("projectDescription").value;
         console.log(userList);
         if (userList !== "" && !userList.includes(userID)) userList = userID + ',' + userList;
         var users = userList.split(',');
         users = Array.from(new Set(users));
-        if (projectID !== "" && userList !== "") {
+        if (projectID !== "" && userList !== "" && description !== "") {
             var requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userList: users })
+                body: JSON.stringify({ userList: users, description: description })
             };
             const response = await fetch('/createProject/' + projectID + '/' + userID, requestOptions);
             const result = await response.text();
             alert(result);
-        } else if (projectID !== "" && userList === "") {
+            changeDisplaySelect(false);
+            changeDisplayCreate(false);
+        } else if (projectID !== "" && userList === "" && description !== "") {
             requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userList: "all" })
+                body: JSON.stringify({ userList: "all", description: description })
             };
             const response = await fetch('/createProject/' + projectID + '/' + userID, requestOptions);
             const result = await response.text();
             alert(result);
+            changeDisplaySelect(false);
+            changeDisplayCreate(false);
+        } else if (projectID === "" || description === "") {
+            alert("Project ID and description cannot be empty");
         }
         showAllProjects();
     }
@@ -112,6 +119,7 @@ function Projects() {
                 hwset2num: item.HWSet[1],
                 hwset2den: item.HWSet[3],
                 creator: item.creator,
+                description: item.description,
                 display: true
             }))
         });
@@ -165,7 +173,8 @@ function Projects() {
                             hwset2num: item.HWSet[1],
                             hwset2den: item.HWSet[3],
                             creator: item.creator,
-                            // display: true
+                            description: item.description,
+                            display: true
                         })),
                     })
                 });
@@ -237,9 +246,8 @@ function Projects() {
                                     <input id="userList" className="proj-input" placeholder="Authorized Users"></input>
                                 </div>
                             </div>
-{/* LOOK HERE ARJUN */}
-                            {/* Grab Project Description from below input */}
-                            <input id="projectDescrip" className="proj-input" placeholder="Project Description" style={{ width: "420px" }}></input>
+            
+                            <input id="projectDescription" className="proj-input" placeholder="Project Description" style={{ width: "420px" }}></input>
                         </div>
 
 
@@ -254,8 +262,6 @@ function Projects() {
                         <button className="cancel-create-proj"
                             onClick={() => {
                                 createProject();
-                                changeDisplaySelect(false);
-                                changeDisplayCreate(false);
                             }}>
                             Create
                         </button>
@@ -326,7 +332,7 @@ function Projects() {
                     return i.pid !== "DoNotDelete" ? <button className="select-proj-button"
                         onClick={() => handleSelectProject(i)}
                         // CHANGE THESE VALS ONCE DESCRIPTION IMPLEMENTED
-                        onMouseEnter={() => { changeShowProjDesc(true); changeProjDescVal("Name: " + i.pid + ", Users: " + i.users)}}
+                        onMouseEnter={() => { changeShowProjDesc(true); changeProjDescVal("Description: " + i.description)}}
                         onMouseLeave={() => { changeShowProjDesc(false); }}
                     ><SelectProj name={i.pid} userID={userID} users={i.users}
                         /></button> : null
