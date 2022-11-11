@@ -84,16 +84,18 @@ programming languages such as Ruby, Node.js, Java, Python, Go, PHP, Scala, Cloju
 
 ### R1-4:
 #### Tools:
-Figma for mockups; <br/>
-Python for backend; <br/>
-PyTest for testing; <br/>
-MongoDB for database; <br/>
-Heroku for cloud deploying; <br/>
-React.js for front-end; <br/>
+Python for backend <br/>
+Flask for backend framework <br/>
+PyTest for testing <br/>
+MongoDB for database <br/>
+Heroku for cloud deploying <br/>
+React.js for front-end <br/>
 
 #### Approach:
 We are going to have a front-end and a back-end team that work together and communicate with each other throughout the project. Teams will check up with each other
 in our weekly meetings and plan accordingly as we go. <br/>
 
-Front-end: Tyler, Axel, Steven <br/>
-Back-end: Brock, Arjun, Grayson <br/>
+Front-end: Tyler, Axel, Steven, Arjun <br/>
+Back-end: Brock, Grayson, Arjun <br/>
+Deploying: Steven <br/>
+Testing: Axel <br/>
