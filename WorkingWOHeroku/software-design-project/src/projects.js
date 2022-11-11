@@ -347,6 +347,10 @@ function Projects() {
             </div>
 
             <div className="select-project" style={displaySelect ? { display: 'flex', padding: "10px" } : { display: 'none' }}>
+                <button className="create-proj-btn" style={{ marginBottom: "20px" }} onClick={() => showAllProjects()}>
+                    Show All Projects
+                </button>
+
                 {state.data.map((i) => {
                     return i.pid !== "DoNotDelete" ? 
                         <button className="select-proj-button"
@@ -360,9 +364,7 @@ function Projects() {
                     : null
                 })}
 
-                <button className="create-proj-btn" style={{ marginTop: "20px" }} onClick={() => showAllProjects()}>
-                    Show All Projects
-                </button>
+                
             </div>
 
             <div className="proj-desc-popup" style={showProjDesc ? { display: 'block' } : { display: 'none' }}>
