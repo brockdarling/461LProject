@@ -277,6 +277,9 @@ def addUsersToProject(projectID, userID):
         return "Invalid Project ID"
 
     proj = projects.find_one({'projectID': projectID})
+    if not proj:
+        return "This project does not exist"
+
     print(userID)
     print(proj['creator'])
 
