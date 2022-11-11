@@ -34,7 +34,6 @@ def newUser(username, password, uid):
     if users.find_one({'uid': uid}):
         return username + " is already a user"
     encryptedPassword = customEncrypt(password, 7, 1)
-    # decrypt = customEncrypt(encryptedPassword, 7, -1)
     userData = {
         'username' : username,
         'password' : encryptedPassword,
@@ -51,10 +50,9 @@ def confirm(uid, password):
     if not signIn:
         return uid + " is not a user for the website"
     decryptedPassword = customEncrypt(signIn['password'], 7, -1)
-    # print(decryptedPassword)
     if decryptedPassword != password:
         return password + ' is not the correct password'
-    return uid + " is a user for the website"
+    return signIn['username']
 
     
 # This function queries the projectId and quantity from the URL and returns the
@@ -111,7 +109,6 @@ def checkIn_hardware(projectid, hwset, qty, userID):
 
     allPjs = projects.find({})
     for proj in allPjs:
-        # print("here once")
         projects.update_one({'projectID': proj["projectID"]},{'$set': {'HWSet.'+str(hwSet-1): newQty}})
 
     returnData = {
@@ -120,7 +117,6 @@ def checkIn_hardware(projectid, hwset, qty, userID):
         "qty": newQty,
         "setsCheckedIn": setsCheckedIn}
 
-    # print(returnData)
     return jsonify(returnData)
 
 
@@ -168,7 +164,6 @@ def checkOut_hardware(projectid, hwset, qty, userID):
 
     allPjs = projects.find({})
     for proj in allPjs:
-        # print("here once")
         projects.update_one({'projectID': proj["projectID"]},{'$set': {'HWSet.'+str(hwSet-1): newQty}})
 
 
@@ -192,8 +187,7 @@ def joinProject(projectid, userID):
     if userList == 'all' or userID in userList:
         users.update_one({'uid': userID},{'$set': {'projects.' + str(projectid): [0,0]}})
         return "Joined "+projectid
-        # projects.update_one({'projectID': projectid},{'$push': {'users' :  userID}})
-    # return "Joined " + projectid
+
     return "Cannot join "+projectid
 
 # This function queries the projectId from the URL and returns the project id to the
@@ -205,8 +199,7 @@ def leaveProject(projectid, userID):
     thisPj = pjs[projectid]
     currQty1 = thisPj[0]
     currQty2 = thisPj[1]
-    # print(currQty1)
-    # print(currQty2)
+
     if (currQty1 == 0) & (currQty2 == 0):
         users.update_one({'uid': userID},{'$unset': {'projects.' + str(projectid) : ""}})
         # projects.update_one({'projectID': projectid},{'$pull': {'users' :  userID}})
@@ -223,8 +216,7 @@ def leaveProject(projectid, userID):
         return projectid
     else:
         return ""
-    # return jsonify(returnData)
-    #return projectid
+
 
 @app.route('/allprojects', methods=['GET'])
 def getAllProjects():
@@ -253,7 +245,8 @@ def createProject(projectid, userid):
         "projectID": projectid,
         "HWSet": [pj['HWSet'][0], pj['HWSet'][1], pj['HWSet'][2], pj['HWSet'][3]],
         "creator": userid,
-        "users": request_data['userList']
+        "users": request_data['userList'],
+        "description": request_data['description']
     }
     projects.insert_one(newProj)
 
@@ -263,15 +256,42 @@ def createProject(projectid, userid):
 @app.route('/getUsersProjects', methods=['GET'])
 def getProjectsUsersHaveJoined():
     usersProjects = list(users.find({}, {'uid':1, 'projects':1}))
-    # print(usersProjects)
+    
     for i in usersProjects:
         del i['_id']
     return (usersProjects)
 
 
 
-# do we need an api to delete projects?
+@app.route('/addUserToProject/<projectID>/<userID>', methods=['GET','POST'])
+def addUsersToProject(projectID, userID):
+    request_data = request.get_json()
+    # request data should be an object with a field called userList which is an array of strings
+    # accessed same way as in the createProject method
 
+    # if the userid is the same as the project's creator, add all users to db
+        # if there is a duplicate user, skip adding it
+        # return "users added" or something
+    # otherwise return userid+" does not have permission to add" or something
+    if projectID == "DoNotDelete":
+        return "Invalid Project ID"
 
+    proj = projects.find_one({'projectID': projectID})
+    print(userID)
+    print(proj['creator'])
+
+    if not proj:
+            return projectID + " does not exist"
+    if userID == proj['creator']:
+        if proj['users'] == 'all':
+            return "Everyone already has access to this project"
+        for i in request_data['userList']:
+            if not (i in proj['users']):
+                projects.update_one({'projectID': projectID},{'$push': {'users' :  i}})
+        return "Users added"
+    else: 
+        return userID + " does not have permission to add users to this project"
+
+    
 if __name__ == "__main__":
     app.run()

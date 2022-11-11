@@ -14,7 +14,7 @@ function LoginForm() {
             if (result === null || result === userID+" is not a user for the website" || result === password+" is not the correct password") {
                 alert("Incorrect userID or password");
             } else {
-                navigate('/Projects', {state: {user: userID}});
+                navigate('/Projects', {state: {userid: userID, username: result}});
             } 
         } else {
             alert("UserID and Password cannot be empty");
