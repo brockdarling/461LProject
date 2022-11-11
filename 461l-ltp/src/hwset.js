@@ -111,13 +111,13 @@ class HWSet extends React.Component {
 
                 // this.state.refreshProject();
 
-                // if (this.state.viewSingle !== this.state.name) {
-                //     this.state.refreshProject();
-                //     this.state.refreshProject();
-                //     this.state.updateDisp(true);
-                //     await this.delay(0);
-                //     this.state.updateDisp(false);
-                // }
+                if (this.state.viewSingle !== this.state.name) {
+                    this.state.refreshProject();
+                    this.state.refreshProject();
+                    this.state.updateDisp(true);
+                    await this.delay(0);
+                    this.state.updateDisp(false);
+                }
             }
         }
     }
@@ -150,13 +150,13 @@ class HWSet extends React.Component {
 
                 // this.state.refreshProject();
 
-                // if (this.state.viewSingle !== this.state.name) {
-                //     this.state.refreshProject();
-                //     this.state.refreshProject();
-                //     this.state.updateDisp(true);
-                //     await this.delay(0);
-                //     this.state.updateDisp(false);
-                // }
+                if (this.state.viewSingle !== this.state.name) {
+                    this.state.refreshProject();
+                    this.state.refreshProject();
+                    this.state.updateDisp(true);
+                    await this.delay(0);
+                    this.state.updateDisp(false);
+                }
             }
         }
     }
